@@ -1,4 +1,8 @@
+require File.expand_path('../migration_helper.rb', __FILE__)
+
 class UdateJobStatsView < ActiveRecord::Migration
+  include MigrationHelper
+
   def change
     reversible do |dir|
       dir.up do
@@ -8,7 +12,7 @@ class UdateJobStatsView < ActiveRecord::Migration
           CREATE OR REPLACE VIEW job_stats AS
             SELECT jobs.id as job_id,
              (select count(*) from tasks where tasks.job_id = jobs.id) as total,
-        #{ Settings[:constants][:STATES][:JOB].map{|state|
+        #{ config_default[:constants][:STATES][:JOB].map{|state|
         "(select count(*) from tasks where tasks.job_id = jobs.id and state = '" + state +"') AS " + state
         }.join(", ")}
             FROM jobs

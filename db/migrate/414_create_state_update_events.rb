@@ -1,4 +1,4 @@
-require Rails.root.join("db","migrate","migration_helper.rb")
+require File.expand_path('../migration_helper.rb', __FILE__)
 
 class CreateStateUpdateEvents < ActiveRecord::Migration
   include MigrationHelper
@@ -39,7 +39,7 @@ class CreateStateUpdateEvents < ActiveRecord::Migration
             ALTER TABLE #{table_name}
                 DROP CONSTRAINT IF EXISTS check_valid_state;
             ALTER TABLE #{table_name} ADD CONSTRAINT check_valid_state CHECK
-            (state IN (#{ Settings[:constants][:STATES][entity_name.upcase.to_sym].map{|s|"'#{s}'"}.join(', ')}));
+            (state IN (#{ config_default[:constants][:STATES][entity_name.upcase.to_sym].map{|s|"'#{s}'"}.join(', ')}));
           SQL
         end
       end

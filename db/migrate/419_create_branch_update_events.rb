@@ -1,4 +1,4 @@
-require Rails.root.join("db","migrate","migration_helper.rb")
+require File.expand_path('../migration_helper.rb', __FILE__)
 
 class CreateBranchUpdateEvents < ActiveRecord::Migration
   include MigrationHelper

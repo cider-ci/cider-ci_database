@@ -1,4 +1,9 @@
 class ChangeRepositoryFields < ActiveRecord::Migration
+
+  class ChangeRepositoryFieldsRepository < ActiveRecord::Base
+    self.table_name = :repositories
+  end
+
   def change
 
     add_column :repositories, :foreign_api_token_bearer, :string
@@ -8,7 +13,7 @@ class ChangeRepositoryFields < ActiveRecord::Migration
     change_column :repositories, :foreign_api_owner, :string, null: true, default: nil
     change_column :repositories, :foreign_api_repo, :string, null: true, default: nil
 
-    Repository.find_each do |repo|
+    ChangeRepositoryFieldsRepository.find_each do |repo|
       repo.update_attributes! foreign_api_endpoint: repo.foreign_api_endpoint.presence
       repo.update_attributes! foreign_api_authtoken: repo.foreign_api_authtoken.presence
       repo.update_attributes! foreign_api_owner: repo.foreign_api_owner.presence

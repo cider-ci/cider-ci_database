@@ -1,5 +1,11 @@
 module MigrationHelper extend ActiveSupport::Concern
 
+  def config_default
+    @config_default ||= YAML.load_file(
+      File.expand_path('../../../config_default.yml', __FILE__)
+    ).with_indifferent_access
+  end
+
   def create_trgm_index(t, c)
     execute "CREATE INDEX ON #{t} USING gin(#{c} gin_trgm_ops);"
   end

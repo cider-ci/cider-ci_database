@@ -14,21 +14,6 @@ class ConsolidateGithubAuthtokensIntoDb < ActiveRecord::Migration
         SQL
       end
     end
-
-    Repository.find_each do |repo|
-      if repo.use_default_github_authtoken
-        if (token = Settings[:github_authtoken])
-          repo.update_attributes!  \
-            foreign_api_authtoken: token,
-            foreign_api_endpoint: 'https://api.github.com'
-        end
-      end
-      if repo.github_authtoken.present?
-        repo.update_attributes! \
-          foreign_api_authtoken: repo.github_authtoken,
-          foreign_api_endpoint: 'https://api.github.com'
-      end
-    end
     remove_column :repositories, :use_default_github_authtoken, :boolean, nil: false, default: false
     remove_column :repositories, :github_authtoken, :text
   end
