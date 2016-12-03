@@ -1,0 +1,19 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  host: localhost
+  pool: 3
+  username: cider-ci
+  password: secret
+  database: cider-ci_v4
+  variables:
+    statement_timeout: 1000
+
+development:
+  <<: *default
+
+test: &test
+  <<: *default
+
+production:
+  <<: *default
