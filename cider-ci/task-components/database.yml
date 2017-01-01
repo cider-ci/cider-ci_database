@@ -1,0 +1,19 @@
+traits:
+  PostgreSQL 9.5: true
+scripts:
+  create-database:
+    body: |
+      #!/usr/bin/env bash
+      set -eux
+      createdb $DATABASE_NAME
+      psql -d $DATABASE_NAME -f $DATABASE_DIR/db/structure.sql
+  delete-database:
+    body: |
+      #!/usr/bin/env bash
+      set -eux
+      dropdb $DATABASE_NAME
+    ignore_state: true
+    start_when:
+      'the database has been created':
+        script_key: create-database
+        states: [passed]
