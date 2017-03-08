@@ -2,11 +2,12 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 9.5.1
--- Dumped by pg_dump version 9.5.1
+-- Dumped from database version 9.6.2
+-- Dumped by pg_dump version 9.6.2
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SET check_function_bodies = false;
@@ -688,6 +689,7 @@ CREATE TABLE repositories (
     send_status_notifications boolean DEFAULT true NOT NULL,
     manage_remote_push_hooks boolean DEFAULT false NOT NULL,
     branch_trigger_max_commit_age text DEFAULT '12 hours'::text,
+    cron_trigger_enabled boolean DEFAULT false,
     CONSTRAINT branch_trigger_max_commit_age_not_blank CHECK ((branch_trigger_max_commit_age !~ '^\s*$'::text)),
     CONSTRAINT check_valid_remote_api_type CHECK ((remote_api_type = ANY (ARRAY['github'::text, 'gitlab'::text, 'bitbucket'::text]))),
     CONSTRAINT foreign_api_authtoken_not_empty CHECK (((remote_api_token)::text <> ''::text)),
@@ -1235,7 +1237,7 @@ CREATE TABLE welcome_page_settings (
 
 
 --
--- Name: branch_update_events_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: branch_update_events branch_update_events_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY branch_update_events
@@ -1243,7 +1245,7 @@ ALTER TABLE ONLY branch_update_events
 
 
 --
--- Name: branches_commits_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: branches_commits branches_commits_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY branches_commits
@@ -1251,7 +1253,7 @@ ALTER TABLE ONLY branches_commits
 
 
 --
--- Name: branches_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: branches branches_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY branches
@@ -1259,7 +1261,7 @@ ALTER TABLE ONLY branches
 
 
 --
--- Name: commits_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: commits commits_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY commits
@@ -1267,7 +1269,7 @@ ALTER TABLE ONLY commits
 
 
 --
--- Name: email_addresses_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: email_addresses email_addresses_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY email_addresses
@@ -1275,7 +1277,7 @@ ALTER TABLE ONLY email_addresses
 
 
 --
--- Name: executor_issues_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: executor_issues executor_issues_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY executor_issues
@@ -1283,7 +1285,7 @@ ALTER TABLE ONLY executor_issues
 
 
 --
--- Name: executors_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: executors executors_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY executors
@@ -1291,7 +1293,7 @@ ALTER TABLE ONLY executors
 
 
 --
--- Name: job_issues_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: job_issues job_issues_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY job_issues
@@ -1299,7 +1301,7 @@ ALTER TABLE ONLY job_issues
 
 
 --
--- Name: job_specifications_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: job_specifications job_specifications_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY job_specifications
@@ -1307,7 +1309,7 @@ ALTER TABLE ONLY job_specifications
 
 
 --
--- Name: job_state_update_events_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: job_state_update_events job_state_update_events_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY job_state_update_events
@@ -1315,7 +1317,7 @@ ALTER TABLE ONLY job_state_update_events
 
 
 --
--- Name: jobs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: jobs jobs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY jobs
@@ -1323,7 +1325,7 @@ ALTER TABLE ONLY jobs
 
 
 --
--- Name: pending_create_trials_evaluations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: pending_create_trials_evaluations pending_create_trials_evaluations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY pending_create_trials_evaluations
@@ -1331,7 +1333,7 @@ ALTER TABLE ONLY pending_create_trials_evaluations
 
 
 --
--- Name: pending_job_evaluations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: pending_job_evaluations pending_job_evaluations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY pending_job_evaluations
@@ -1339,7 +1341,7 @@ ALTER TABLE ONLY pending_job_evaluations
 
 
 --
--- Name: pending_result_propagations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: pending_result_propagations pending_result_propagations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY pending_result_propagations
@@ -1347,7 +1349,7 @@ ALTER TABLE ONLY pending_result_propagations
 
 
 --
--- Name: pending_task_evaluations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: pending_task_evaluations pending_task_evaluations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY pending_task_evaluations
@@ -1355,7 +1357,7 @@ ALTER TABLE ONLY pending_task_evaluations
 
 
 --
--- Name: repositories_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: repositories repositories_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY repositories
@@ -1363,7 +1365,7 @@ ALTER TABLE ONLY repositories
 
 
 --
--- Name: repository_events_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: repository_events repository_events_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY repository_events
@@ -1371,7 +1373,7 @@ ALTER TABLE ONLY repository_events
 
 
 --
--- Name: script_state_update_events_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: script_state_update_events script_state_update_events_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY script_state_update_events
@@ -1379,7 +1381,7 @@ ALTER TABLE ONLY script_state_update_events
 
 
 --
--- Name: scripts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: scripts scripts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY scripts
@@ -1387,7 +1389,7 @@ ALTER TABLE ONLY scripts
 
 
 --
--- Name: submodules_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: submodules submodules_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY submodules
@@ -1395,7 +1397,7 @@ ALTER TABLE ONLY submodules
 
 
 --
--- Name: task_specifications_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: task_specifications task_specifications_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY task_specifications
@@ -1403,7 +1405,7 @@ ALTER TABLE ONLY task_specifications
 
 
 --
--- Name: task_state_update_events_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: task_state_update_events task_state_update_events_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY task_state_update_events
@@ -1411,7 +1413,7 @@ ALTER TABLE ONLY task_state_update_events
 
 
 --
--- Name: tasks_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: tasks tasks_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY tasks
@@ -1419,7 +1421,7 @@ ALTER TABLE ONLY tasks
 
 
 --
--- Name: tree_attachments_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: tree_attachments tree_attachments_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY tree_attachments
@@ -1427,7 +1429,7 @@ ALTER TABLE ONLY tree_attachments
 
 
 --
--- Name: tree_id_notifications_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: tree_id_notifications tree_id_notifications_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY tree_id_notifications
@@ -1435,7 +1437,7 @@ ALTER TABLE ONLY tree_id_notifications
 
 
 --
--- Name: tree_issues_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: tree_issues tree_issues_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY tree_issues
@@ -1443,7 +1445,7 @@ ALTER TABLE ONLY tree_issues
 
 
 --
--- Name: trial_attachments_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: trial_attachments trial_attachments_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY trial_attachments
@@ -1451,7 +1453,7 @@ ALTER TABLE ONLY trial_attachments
 
 
 --
--- Name: trial_issues_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: trial_issues trial_issues_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY trial_issues
@@ -1459,7 +1461,7 @@ ALTER TABLE ONLY trial_issues
 
 
 --
--- Name: trial_state_update_events_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: trial_state_update_events trial_state_update_events_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY trial_state_update_events
@@ -1467,7 +1469,7 @@ ALTER TABLE ONLY trial_state_update_events
 
 
 --
--- Name: trials_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: trials trials_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY trials
@@ -1475,7 +1477,7 @@ ALTER TABLE ONLY trials
 
 
 --
--- Name: user_events_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: user_events user_events_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY user_events
@@ -1483,7 +1485,7 @@ ALTER TABLE ONLY user_events
 
 
 --
--- Name: users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY users
@@ -1491,7 +1493,7 @@ ALTER TABLE ONLY users
 
 
 --
--- Name: welcome_page_settings_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: welcome_page_settings welcome_page_settings_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY welcome_page_settings
@@ -1982,7 +1984,7 @@ CREATE INDEX user_lower_login_idx ON users USING btree (lower((login)::text));
 
 
 --
--- Name: _RETURN; Type: RULE; Schema: public; Owner: -
+-- Name: job_cache_signatures _RETURN; Type: RULE; Schema: public; Owner: -
 --
 
 CREATE RULE "_RETURN" AS
@@ -2012,315 +2014,315 @@ CREATE RULE "_RETURN" AS
 
 
 --
--- Name: clean_branch_update_events; Type: TRIGGER; Schema: public; Owner: -
+-- Name: branch_update_events clean_branch_update_events; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER clean_branch_update_events AFTER INSERT ON branch_update_events FOR EACH STATEMENT EXECUTE PROCEDURE clean_branch_update_events();
 
 
 --
--- Name: clean_job_state_update_events; Type: TRIGGER; Schema: public; Owner: -
+-- Name: job_state_update_events clean_job_state_update_events; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER clean_job_state_update_events AFTER INSERT ON job_state_update_events FOR EACH STATEMENT EXECUTE PROCEDURE clean_job_state_update_events();
 
 
 --
--- Name: clean_repository_events; Type: TRIGGER; Schema: public; Owner: -
+-- Name: repository_events clean_repository_events; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER clean_repository_events AFTER INSERT ON repository_events FOR EACH STATEMENT EXECUTE PROCEDURE clean_repository_events();
 
 
 --
--- Name: clean_script_state_update_events; Type: TRIGGER; Schema: public; Owner: -
+-- Name: script_state_update_events clean_script_state_update_events; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER clean_script_state_update_events AFTER INSERT ON script_state_update_events FOR EACH STATEMENT EXECUTE PROCEDURE clean_script_state_update_events();
 
 
 --
--- Name: clean_task_state_update_events; Type: TRIGGER; Schema: public; Owner: -
+-- Name: task_state_update_events clean_task_state_update_events; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER clean_task_state_update_events AFTER INSERT ON task_state_update_events FOR EACH STATEMENT EXECUTE PROCEDURE clean_task_state_update_events();
 
 
 --
--- Name: clean_trial_state_update_events; Type: TRIGGER; Schema: public; Owner: -
+-- Name: trial_state_update_events clean_trial_state_update_events; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER clean_trial_state_update_events AFTER INSERT ON trial_state_update_events FOR EACH STATEMENT EXECUTE PROCEDURE clean_trial_state_update_events();
 
 
 --
--- Name: clean_user_events; Type: TRIGGER; Schema: public; Owner: -
+-- Name: user_events clean_user_events; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER clean_user_events AFTER INSERT ON user_events FOR EACH STATEMENT EXECUTE PROCEDURE clean_user_events();
 
 
 --
--- Name: create_branch_update_event; Type: TRIGGER; Schema: public; Owner: -
+-- Name: branches create_branch_update_event; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER create_branch_update_event AFTER INSERT OR UPDATE ON branches FOR EACH ROW EXECUTE PROCEDURE create_branch_update_event();
 
 
 --
--- Name: create_job_state_update_events_on_insert; Type: TRIGGER; Schema: public; Owner: -
+-- Name: jobs create_job_state_update_events_on_insert; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER create_job_state_update_events_on_insert AFTER INSERT ON jobs FOR EACH ROW EXECUTE PROCEDURE create_job_state_update_events();
 
 
 --
--- Name: create_job_state_update_events_on_update; Type: TRIGGER; Schema: public; Owner: -
+-- Name: jobs create_job_state_update_events_on_update; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER create_job_state_update_events_on_update AFTER UPDATE ON jobs FOR EACH ROW WHEN (((old.state)::text IS DISTINCT FROM (new.state)::text)) EXECUTE PROCEDURE create_job_state_update_events();
 
 
 --
--- Name: create_pending_create_trials_evaluations_on_tasks_insert; Type: TRIGGER; Schema: public; Owner: -
+-- Name: tasks create_pending_create_trials_evaluations_on_tasks_insert; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER create_pending_create_trials_evaluations_on_tasks_insert AFTER INSERT ON tasks FOR EACH ROW EXECUTE PROCEDURE create_pending_create_trials_evaluations_on_tasks_insert();
 
 
 --
--- Name: create_pending_create_trials_evaluations_on_trial_state_change; Type: TRIGGER; Schema: public; Owner: -
+-- Name: trial_state_update_events create_pending_create_trials_evaluations_on_trial_state_change; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER create_pending_create_trials_evaluations_on_trial_state_change AFTER INSERT ON trial_state_update_events FOR EACH ROW WHEN (((new.state)::text = ANY ((ARRAY['aborted'::character varying, 'defective'::character varying, 'failed'::character varying, 'passed'::character varying, 'skipped'::character varying])::text[]))) EXECUTE PROCEDURE create_pending_create_trials_evaluations_on_trial_state_change();
 
 
 --
--- Name: create_pending_job_evaluation_on_task_state_update_event_insert; Type: TRIGGER; Schema: public; Owner: -
+-- Name: task_state_update_events create_pending_job_evaluation_on_task_state_update_event_insert; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER create_pending_job_evaluation_on_task_state_update_event_insert AFTER INSERT ON task_state_update_events FOR EACH ROW EXECUTE PROCEDURE create_pending_job_evaluation_on_task_state_update_event_insert();
 
 
 --
--- Name: create_pending_result_propagation; Type: TRIGGER; Schema: public; Owner: -
+-- Name: trials create_pending_result_propagation; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER create_pending_result_propagation AFTER UPDATE ON trials FOR EACH ROW WHEN ((old.result IS DISTINCT FROM new.result)) EXECUTE PROCEDURE create_pending_result_propagation();
 
 
 --
--- Name: create_pending_task_evaluation_on_trial_state_update_event_inse; Type: TRIGGER; Schema: public; Owner: -
+-- Name: trial_state_update_events create_pending_task_evaluation_on_trial_state_update_event_inse; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER create_pending_task_evaluation_on_trial_state_update_event_inse AFTER INSERT ON trial_state_update_events FOR EACH ROW EXECUTE PROCEDURE create_pending_task_evaluation_on_trial_state_update_event_inse();
 
 
 --
--- Name: create_script_state_update_events_on_insert; Type: TRIGGER; Schema: public; Owner: -
+-- Name: scripts create_script_state_update_events_on_insert; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER create_script_state_update_events_on_insert AFTER INSERT ON scripts FOR EACH ROW EXECUTE PROCEDURE create_script_state_update_events();
 
 
 --
--- Name: create_script_state_update_events_on_update; Type: TRIGGER; Schema: public; Owner: -
+-- Name: scripts create_script_state_update_events_on_update; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER create_script_state_update_events_on_update AFTER UPDATE ON scripts FOR EACH ROW WHEN (((old.state)::text IS DISTINCT FROM (new.state)::text)) EXECUTE PROCEDURE create_script_state_update_events();
 
 
 --
--- Name: create_task_state_update_events_on_insert; Type: TRIGGER; Schema: public; Owner: -
+-- Name: tasks create_task_state_update_events_on_insert; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER create_task_state_update_events_on_insert AFTER INSERT ON tasks FOR EACH ROW EXECUTE PROCEDURE create_task_state_update_events();
 
 
 --
--- Name: create_task_state_update_events_on_update; Type: TRIGGER; Schema: public; Owner: -
+-- Name: tasks create_task_state_update_events_on_update; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER create_task_state_update_events_on_update AFTER UPDATE ON tasks FOR EACH ROW WHEN (((old.state)::text IS DISTINCT FROM (new.state)::text)) EXECUTE PROCEDURE create_task_state_update_events();
 
 
 --
--- Name: create_tree_id_notification_on_branch_change; Type: TRIGGER; Schema: public; Owner: -
+-- Name: branches create_tree_id_notification_on_branch_change; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER create_tree_id_notification_on_branch_change AFTER INSERT OR UPDATE ON branches FOR EACH ROW EXECUTE PROCEDURE create_tree_id_notification_on_branch_change();
 
 
 --
--- Name: create_tree_id_notification_on_job_state_change; Type: TRIGGER; Schema: public; Owner: -
+-- Name: jobs create_tree_id_notification_on_job_state_change; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER create_tree_id_notification_on_job_state_change AFTER UPDATE ON jobs FOR EACH ROW WHEN (((old.state)::text IS DISTINCT FROM (new.state)::text)) EXECUTE PROCEDURE create_tree_id_notification_on_job_state_change();
 
 
 --
--- Name: create_trial_state_update_events_on_insert; Type: TRIGGER; Schema: public; Owner: -
+-- Name: trials create_trial_state_update_events_on_insert; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER create_trial_state_update_events_on_insert AFTER INSERT ON trials FOR EACH ROW EXECUTE PROCEDURE create_trial_state_update_events();
 
 
 --
--- Name: create_trial_state_update_events_on_update; Type: TRIGGER; Schema: public; Owner: -
+-- Name: trials create_trial_state_update_events_on_update; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER create_trial_state_update_events_on_update AFTER UPDATE ON trials FOR EACH ROW WHEN (((old.state)::text IS DISTINCT FROM (new.state)::text)) EXECUTE PROCEDURE create_trial_state_update_events();
 
 
 --
--- Name: repository_event; Type: TRIGGER; Schema: public; Owner: -
+-- Name: repositories repository_event; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER repository_event AFTER INSERT OR DELETE OR UPDATE ON repositories FOR EACH ROW EXECUTE PROCEDURE repository_event();
 
 
 --
--- Name: repository_event_truncate; Type: TRIGGER; Schema: public; Owner: -
+-- Name: repositories repository_event_truncate; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER repository_event_truncate AFTER TRUNCATE ON repositories FOR EACH STATEMENT EXECUTE PROCEDURE repository_event();
 
 
 --
--- Name: update_updated_at_column_of_branches; Type: TRIGGER; Schema: public; Owner: -
+-- Name: branches update_updated_at_column_of_branches; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER update_updated_at_column_of_branches BEFORE UPDATE ON branches FOR EACH ROW WHEN ((old.* IS DISTINCT FROM new.*)) EXECUTE PROCEDURE update_updated_at_column();
 
 
 --
--- Name: update_updated_at_column_of_commits; Type: TRIGGER; Schema: public; Owner: -
+-- Name: commits update_updated_at_column_of_commits; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER update_updated_at_column_of_commits BEFORE UPDATE ON commits FOR EACH ROW WHEN ((old.* IS DISTINCT FROM new.*)) EXECUTE PROCEDURE update_updated_at_column();
 
 
 --
--- Name: update_updated_at_column_of_executor_issues; Type: TRIGGER; Schema: public; Owner: -
+-- Name: executor_issues update_updated_at_column_of_executor_issues; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER update_updated_at_column_of_executor_issues BEFORE UPDATE ON executor_issues FOR EACH ROW WHEN ((old.* IS DISTINCT FROM new.*)) EXECUTE PROCEDURE update_updated_at_column();
 
 
 --
--- Name: update_updated_at_column_of_executors; Type: TRIGGER; Schema: public; Owner: -
+-- Name: executors update_updated_at_column_of_executors; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER update_updated_at_column_of_executors BEFORE UPDATE ON executors FOR EACH ROW WHEN ((old.* IS DISTINCT FROM new.*)) EXECUTE PROCEDURE update_updated_at_column();
 
 
 --
--- Name: update_updated_at_column_of_job_issues; Type: TRIGGER; Schema: public; Owner: -
+-- Name: job_issues update_updated_at_column_of_job_issues; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER update_updated_at_column_of_job_issues BEFORE UPDATE ON job_issues FOR EACH ROW WHEN ((old.* IS DISTINCT FROM new.*)) EXECUTE PROCEDURE update_updated_at_column();
 
 
 --
--- Name: update_updated_at_column_of_jobs; Type: TRIGGER; Schema: public; Owner: -
+-- Name: jobs update_updated_at_column_of_jobs; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER update_updated_at_column_of_jobs BEFORE UPDATE ON jobs FOR EACH ROW WHEN ((old.* IS DISTINCT FROM new.*)) EXECUTE PROCEDURE update_updated_at_column();
 
 
 --
--- Name: update_updated_at_column_of_repositories; Type: TRIGGER; Schema: public; Owner: -
+-- Name: repositories update_updated_at_column_of_repositories; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER update_updated_at_column_of_repositories BEFORE UPDATE ON repositories FOR EACH ROW WHEN ((old.* IS DISTINCT FROM new.*)) EXECUTE PROCEDURE update_updated_at_column();
 
 
 --
--- Name: update_updated_at_column_of_scripts; Type: TRIGGER; Schema: public; Owner: -
+-- Name: scripts update_updated_at_column_of_scripts; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER update_updated_at_column_of_scripts BEFORE UPDATE ON scripts FOR EACH ROW WHEN ((old.* IS DISTINCT FROM new.*)) EXECUTE PROCEDURE update_updated_at_column();
 
 
 --
--- Name: update_updated_at_column_of_tasks; Type: TRIGGER; Schema: public; Owner: -
+-- Name: tasks update_updated_at_column_of_tasks; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER update_updated_at_column_of_tasks BEFORE UPDATE ON tasks FOR EACH ROW WHEN ((old.* IS DISTINCT FROM new.*)) EXECUTE PROCEDURE update_updated_at_column();
 
 
 --
--- Name: update_updated_at_column_of_tree_attachments; Type: TRIGGER; Schema: public; Owner: -
+-- Name: tree_attachments update_updated_at_column_of_tree_attachments; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER update_updated_at_column_of_tree_attachments BEFORE UPDATE ON tree_attachments FOR EACH ROW WHEN ((old.* IS DISTINCT FROM new.*)) EXECUTE PROCEDURE update_updated_at_column();
 
 
 --
--- Name: update_updated_at_column_of_tree_id_notifications; Type: TRIGGER; Schema: public; Owner: -
+-- Name: tree_id_notifications update_updated_at_column_of_tree_id_notifications; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER update_updated_at_column_of_tree_id_notifications BEFORE UPDATE ON tree_id_notifications FOR EACH ROW WHEN ((old.* IS DISTINCT FROM new.*)) EXECUTE PROCEDURE update_updated_at_column();
 
 
 --
--- Name: update_updated_at_column_of_tree_issues; Type: TRIGGER; Schema: public; Owner: -
+-- Name: tree_issues update_updated_at_column_of_tree_issues; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER update_updated_at_column_of_tree_issues BEFORE UPDATE ON tree_issues FOR EACH ROW WHEN ((old.* IS DISTINCT FROM new.*)) EXECUTE PROCEDURE update_updated_at_column();
 
 
 --
--- Name: update_updated_at_column_of_trial_attachments; Type: TRIGGER; Schema: public; Owner: -
+-- Name: trial_attachments update_updated_at_column_of_trial_attachments; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER update_updated_at_column_of_trial_attachments BEFORE UPDATE ON trial_attachments FOR EACH ROW WHEN ((old.* IS DISTINCT FROM new.*)) EXECUTE PROCEDURE update_updated_at_column();
 
 
 --
--- Name: update_updated_at_column_of_trial_issues; Type: TRIGGER; Schema: public; Owner: -
+-- Name: trial_issues update_updated_at_column_of_trial_issues; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER update_updated_at_column_of_trial_issues BEFORE UPDATE ON trial_issues FOR EACH ROW WHEN ((old.* IS DISTINCT FROM new.*)) EXECUTE PROCEDURE update_updated_at_column();
 
 
 --
--- Name: update_updated_at_column_of_trials; Type: TRIGGER; Schema: public; Owner: -
+-- Name: trials update_updated_at_column_of_trials; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER update_updated_at_column_of_trials BEFORE UPDATE ON trials FOR EACH ROW WHEN ((old.* IS DISTINCT FROM new.*)) EXECUTE PROCEDURE update_updated_at_column();
 
 
 --
--- Name: update_updated_at_column_of_users; Type: TRIGGER; Schema: public; Owner: -
+-- Name: users update_updated_at_column_of_users; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER update_updated_at_column_of_users BEFORE UPDATE ON users FOR EACH ROW WHEN ((old.* IS DISTINCT FROM new.*)) EXECUTE PROCEDURE update_updated_at_column();
 
 
 --
--- Name: update_updated_at_column_of_welcome_page_settings; Type: TRIGGER; Schema: public; Owner: -
+-- Name: welcome_page_settings update_updated_at_column_of_welcome_page_settings; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER update_updated_at_column_of_welcome_page_settings BEFORE UPDATE ON welcome_page_settings FOR EACH ROW WHEN ((old.* IS DISTINCT FROM new.*)) EXECUTE PROCEDURE update_updated_at_column();
 
 
 --
--- Name: user_event; Type: TRIGGER; Schema: public; Owner: -
+-- Name: users user_event; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER user_event AFTER INSERT OR DELETE OR UPDATE ON users FOR EACH ROW EXECUTE PROCEDURE user_event();
 
 
 --
--- Name: user_event_truncate; Type: TRIGGER; Schema: public; Owner: -
+-- Name: users user_event_truncate; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER user_event_truncate AFTER TRUNCATE ON users FOR EACH STATEMENT EXECUTE PROCEDURE user_event();
 
 
 --
--- Name: fk_rails_0bf999a237; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: pending_job_evaluations fk_rails_0bf999a237; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY pending_job_evaluations
@@ -2328,7 +2330,7 @@ ALTER TABLE ONLY pending_job_evaluations
 
 
 --
--- Name: fk_rails_1aba877542; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: branch_update_events fk_rails_1aba877542; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY branch_update_events
@@ -2336,7 +2338,7 @@ ALTER TABLE ONLY branch_update_events
 
 
 --
--- Name: fk_rails_2043ecf4ac; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: pending_task_evaluations fk_rails_2043ecf4ac; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY pending_task_evaluations
@@ -2344,7 +2346,7 @@ ALTER TABLE ONLY pending_task_evaluations
 
 
 --
--- Name: fk_rails_2285e098a6; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: pending_task_evaluations fk_rails_2285e098a6; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY pending_task_evaluations
@@ -2352,7 +2354,7 @@ ALTER TABLE ONLY pending_task_evaluations
 
 
 --
--- Name: fk_rails_2420fea61c; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: task_state_update_events fk_rails_2420fea61c; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY task_state_update_events
@@ -2360,7 +2362,7 @@ ALTER TABLE ONLY task_state_update_events
 
 
 --
--- Name: fk_rails_2595d4f43b; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: trial_attachments fk_rails_2595d4f43b; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY trial_attachments
@@ -2368,7 +2370,7 @@ ALTER TABLE ONLY trial_attachments
 
 
 --
--- Name: fk_rails_3bfb7b73f7; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: trials fk_rails_3bfb7b73f7; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY trials
@@ -2376,7 +2378,7 @@ ALTER TABLE ONLY trials
 
 
 --
--- Name: fk_rails_3ccf965e25; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: jobs fk_rails_3ccf965e25; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY jobs
@@ -2384,7 +2386,7 @@ ALTER TABLE ONLY jobs
 
 
 --
--- Name: fk_rails_3e557ab362; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: trials fk_rails_3e557ab362; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY trials
@@ -2392,7 +2394,7 @@ ALTER TABLE ONLY trials
 
 
 --
--- Name: fk_rails_5056f0a1f0; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: jobs fk_rails_5056f0a1f0; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY jobs
@@ -2400,7 +2402,7 @@ ALTER TABLE ONLY jobs
 
 
 --
--- Name: fk_rails_5ff6d4badd; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: script_state_update_events fk_rails_5ff6d4badd; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY script_state_update_events
@@ -2408,7 +2410,7 @@ ALTER TABLE ONLY script_state_update_events
 
 
 --
--- Name: fk_rails_613c47280f; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: pending_job_evaluations fk_rails_613c47280f; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY pending_job_evaluations
@@ -2416,7 +2418,7 @@ ALTER TABLE ONLY pending_job_evaluations
 
 
 --
--- Name: fk_rails_637f302c5b; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: commit_arcs fk_rails_637f302c5b; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY commit_arcs
@@ -2424,7 +2426,7 @@ ALTER TABLE ONLY commit_arcs
 
 
 --
--- Name: fk_rails_73565c5700; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: submodules fk_rails_73565c5700; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY submodules
@@ -2432,7 +2434,7 @@ ALTER TABLE ONLY submodules
 
 
 --
--- Name: fk_rails_741467517e; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: branches fk_rails_741467517e; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY branches
@@ -2440,7 +2442,7 @@ ALTER TABLE ONLY branches
 
 
 --
--- Name: fk_rails_870c3ec6fd; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: pending_result_propagations fk_rails_870c3ec6fd; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY pending_result_propagations
@@ -2448,7 +2450,7 @@ ALTER TABLE ONLY pending_result_propagations
 
 
 --
--- Name: fk_rails_880255918f; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: executor_issues fk_rails_880255918f; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY executor_issues
@@ -2456,7 +2458,7 @@ ALTER TABLE ONLY executor_issues
 
 
 --
--- Name: fk_rails_99e0f3714e; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: pending_create_trials_evaluations fk_rails_99e0f3714e; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY pending_create_trials_evaluations
@@ -2464,7 +2466,7 @@ ALTER TABLE ONLY pending_create_trials_evaluations
 
 
 --
--- Name: fk_rails_b33ab63674; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: job_state_update_events fk_rails_b33ab63674; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY job_state_update_events
@@ -2472,7 +2474,7 @@ ALTER TABLE ONLY job_state_update_events
 
 
 --
--- Name: fk_rails_ce2b80387a; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: branches_commits fk_rails_ce2b80387a; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY branches_commits
@@ -2480,7 +2482,7 @@ ALTER TABLE ONLY branches_commits
 
 
 --
--- Name: fk_rails_ce3c7008c0; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: branches fk_rails_ce3c7008c0; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY branches
@@ -2488,7 +2490,7 @@ ALTER TABLE ONLY branches
 
 
 --
--- Name: fk_rails_cf50105b6a; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: jobs fk_rails_cf50105b6a; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY jobs
@@ -2496,7 +2498,7 @@ ALTER TABLE ONLY jobs
 
 
 --
--- Name: fk_rails_dbbb93c299; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: trial_state_update_events fk_rails_dbbb93c299; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY trial_state_update_events
@@ -2504,7 +2506,7 @@ ALTER TABLE ONLY trial_state_update_events
 
 
 --
--- Name: fk_rails_de643267e7; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: email_addresses fk_rails_de643267e7; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY email_addresses
@@ -2512,7 +2514,7 @@ ALTER TABLE ONLY email_addresses
 
 
 --
--- Name: fk_rails_eb81826b6c; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: scripts fk_rails_eb81826b6c; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY scripts
@@ -2520,7 +2522,7 @@ ALTER TABLE ONLY scripts
 
 
 --
--- Name: fk_rails_f0d4638ea2; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: pending_create_trials_evaluations fk_rails_f0d4638ea2; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY pending_create_trials_evaluations
@@ -2528,7 +2530,7 @@ ALTER TABLE ONLY pending_create_trials_evaluations
 
 
 --
--- Name: fk_rails_f1b0bc6b0c; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: branches_commits fk_rails_f1b0bc6b0c; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY branches_commits
@@ -2536,7 +2538,7 @@ ALTER TABLE ONLY branches_commits
 
 
 --
--- Name: fk_rails_fe00cc3459; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: commit_arcs fk_rails_fe00cc3459; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY commit_arcs
@@ -2544,7 +2546,7 @@ ALTER TABLE ONLY commit_arcs
 
 
 --
--- Name: job_issues_jobs_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: job_issues job_issues_jobs_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY job_issues
@@ -2552,7 +2554,7 @@ ALTER TABLE ONLY job_issues
 
 
 --
--- Name: jobs_job-specifications_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: jobs jobs_job-specifications_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY jobs
@@ -2560,7 +2562,7 @@ ALTER TABLE ONLY jobs
 
 
 --
--- Name: tasks_jobs_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: tasks tasks_jobs_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY tasks
@@ -2568,7 +2570,7 @@ ALTER TABLE ONLY tasks
 
 
 --
--- Name: trial_issues_trials_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: trial_issues trial_issues_trials_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY trial_issues
@@ -2576,7 +2578,7 @@ ALTER TABLE ONLY trial_issues
 
 
 --
--- Name: trials_tasks_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: trials trials_tasks_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY trials
@@ -2702,6 +2704,8 @@ INSERT INTO schema_migrations (version) VALUES ('426');
 INSERT INTO schema_migrations (version) VALUES ('427');
 
 INSERT INTO schema_migrations (version) VALUES ('428');
+
+INSERT INTO schema_migrations (version) VALUES ('429');
 
 INSERT INTO schema_migrations (version) VALUES ('43');
 
