@@ -660,6 +660,7 @@ CREATE TABLE jobs (
     aborted_at timestamp with time zone,
     resumed_by uuid,
     resumed_at timestamp with time zone,
+    trigger_event jsonb,
     CONSTRAINT check_jobs_valid_state CHECK (((state)::text = ANY ((ARRAY['passed'::character varying, 'executing'::character varying, 'pending'::character varying, 'aborting'::character varying, 'aborted'::character varying, 'defective'::character varying, 'failed'::character varying])::text[])))
 );
 
@@ -2708,6 +2709,8 @@ INSERT INTO schema_migrations (version) VALUES ('428');
 INSERT INTO schema_migrations (version) VALUES ('429');
 
 INSERT INTO schema_migrations (version) VALUES ('43');
+
+INSERT INTO schema_migrations (version) VALUES ('430');
 
 INSERT INTO schema_migrations (version) VALUES ('45');
 
