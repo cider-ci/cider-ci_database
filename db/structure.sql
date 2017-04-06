@@ -691,6 +691,8 @@ CREATE TABLE repositories (
     manage_remote_push_hooks boolean DEFAULT false NOT NULL,
     branch_trigger_max_commit_age text DEFAULT '12 hours'::text,
     cron_trigger_enabled boolean DEFAULT false,
+    all_executors_permitted boolean DEFAULT true NOT NULL,
+    all_users_permitted boolean DEFAULT true NOT NULL,
     CONSTRAINT branch_trigger_max_commit_age_not_blank CHECK ((branch_trigger_max_commit_age !~ '^\s*$'::text)),
     CONSTRAINT check_valid_remote_api_type CHECK ((remote_api_type = ANY (ARRAY['github'::text, 'gitlab'::text, 'bitbucket'::text]))),
     CONSTRAINT foreign_api_authtoken_not_empty CHECK (((remote_api_token)::text <> ''::text)),
@@ -1020,6 +1022,31 @@ CREATE TABLE repository_events (
     repository_id uuid,
     event text,
     created_at timestamp with time zone DEFAULT now() NOT NULL
+);
+
+
+--
+-- Name: repository_executor_permissions; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE repository_executor_permissions (
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+    executor_id uuid NOT NULL,
+    repository_id uuid NOT NULL,
+    execute boolean DEFAULT true NOT NULL
+);
+
+
+--
+-- Name: repository_user_permissions; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE repository_user_permissions (
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+    user_id uuid NOT NULL,
+    repository_id uuid NOT NULL,
+    execute boolean DEFAULT true NOT NULL,
+    manage boolean DEFAULT false NOT NULL
 );
 
 
@@ -1371,6 +1398,22 @@ ALTER TABLE ONLY repositories
 
 ALTER TABLE ONLY repository_events
     ADD CONSTRAINT repository_events_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: repository_executor_permissions repository_executor_permissions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY repository_executor_permissions
+    ADD CONSTRAINT repository_executor_permissions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: repository_user_permissions repository_user_permissions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY repository_user_permissions
+    ADD CONSTRAINT repository_user_permissions_pkey PRIMARY KEY (id);
 
 
 --
@@ -2403,6 +2446,14 @@ ALTER TABLE ONLY jobs
 
 
 --
+-- Name: repository_user_permissions fk_rails_50624d2f4e; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY repository_user_permissions
+    ADD CONSTRAINT fk_rails_50624d2f4e FOREIGN KEY (repository_id) REFERENCES repositories(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
 -- Name: script_state_update_events fk_rails_5ff6d4badd; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2475,6 +2526,14 @@ ALTER TABLE ONLY job_state_update_events
 
 
 --
+-- Name: repository_executor_permissions fk_rails_bdef0ebb7b; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY repository_executor_permissions
+    ADD CONSTRAINT fk_rails_bdef0ebb7b FOREIGN KEY (repository_id) REFERENCES repositories(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
 -- Name: branches_commits fk_rails_ce2b80387a; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2499,6 +2558,14 @@ ALTER TABLE ONLY jobs
 
 
 --
+-- Name: repository_user_permissions fk_rails_d503147ced; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY repository_user_permissions
+    ADD CONSTRAINT fk_rails_d503147ced FOREIGN KEY (user_id) REFERENCES users(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
 -- Name: trial_state_update_events fk_rails_dbbb93c299; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2512,6 +2579,14 @@ ALTER TABLE ONLY trial_state_update_events
 
 ALTER TABLE ONLY email_addresses
     ADD CONSTRAINT fk_rails_de643267e7 FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE;
+
+
+--
+-- Name: repository_executor_permissions fk_rails_e57d2c8dc2; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY repository_executor_permissions
+    ADD CONSTRAINT fk_rails_e57d2c8dc2 FOREIGN KEY (executor_id) REFERENCES executors(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -2711,6 +2786,8 @@ INSERT INTO schema_migrations (version) VALUES ('429');
 INSERT INTO schema_migrations (version) VALUES ('43');
 
 INSERT INTO schema_migrations (version) VALUES ('430');
+
+INSERT INTO schema_migrations (version) VALUES ('431');
 
 INSERT INTO schema_migrations (version) VALUES ('45');
 
