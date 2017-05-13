@@ -573,6 +573,30 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
+-- Name: api_tokens; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE api_tokens (
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+    user_id uuid NOT NULL,
+    token_hash character varying(45) NOT NULL,
+    token_part character varying(5) NOT NULL,
+    revoked boolean DEFAULT false NOT NULL,
+    scope_read boolean DEFAULT true NOT NULL,
+    scope_write boolean DEFAULT false NOT NULL,
+    scope_admin_read boolean DEFAULT false NOT NULL,
+    scope_admin_write boolean DEFAULT false NOT NULL,
+    description text,
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    updated_at timestamp with time zone DEFAULT now() NOT NULL,
+    expires_at timestamp with time zone DEFAULT (now() + '1 year'::interval) NOT NULL,
+    CONSTRAINT sensible_scope_admin_read CHECK (((NOT scope_admin_read) OR (scope_admin_read AND scope_write AND scope_read))),
+    CONSTRAINT sensible_scrope_admin_write CHECK (((NOT scope_admin_write) OR (scope_admin_write AND scope_admin_read))),
+    CONSTRAINT sensible_scrope_write CHECK (((NOT scope_write) OR (scope_write AND scope_read)))
+);
+
+
+--
 -- Name: branch_update_events; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1265,6 +1289,14 @@ CREATE TABLE welcome_page_settings (
 
 
 --
+-- Name: api_tokens api_tokens_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY api_tokens
+    ADD CONSTRAINT api_tokens_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: branch_update_events branch_update_events_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1619,6 +1651,13 @@ CREATE UNIQUE INDEX "idx_jobs_tree-id_key" ON jobs USING btree (tree_id, key);
 --
 
 CREATE UNIQUE INDEX "idx_jobs_tree-id_name" ON jobs USING btree (tree_id, name);
+
+
+--
+-- Name: index_api_tokens_on_token_hash; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_api_tokens_on_token_hash ON api_tokens USING btree (token_hash);
 
 
 --
@@ -2233,6 +2272,13 @@ CREATE TRIGGER repository_event_truncate AFTER TRUNCATE ON repositories FOR EACH
 
 
 --
+-- Name: api_tokens update_updated_at_column_of_api_tokens; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER update_updated_at_column_of_api_tokens BEFORE UPDATE ON api_tokens FOR EACH ROW WHEN ((old.* IS DISTINCT FROM new.*)) EXECUTE PROCEDURE update_updated_at_column();
+
+
+--
 -- Name: branches update_updated_at_column_of_branches; Type: TRIGGER; Schema: public; Owner: -
 --
 
@@ -2606,6 +2652,14 @@ ALTER TABLE ONLY pending_create_trials_evaluations
 
 
 --
+-- Name: api_tokens fk_rails_f16b5e0447; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY api_tokens
+    ADD CONSTRAINT fk_rails_f16b5e0447 FOREIGN KEY (user_id) REFERENCES users(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
 -- Name: branches_commits fk_rails_f1b0bc6b0c; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2788,6 +2842,8 @@ INSERT INTO schema_migrations (version) VALUES ('43');
 INSERT INTO schema_migrations (version) VALUES ('430');
 
 INSERT INTO schema_migrations (version) VALUES ('431');
+
+INSERT INTO schema_migrations (version) VALUES ('432');
 
 INSERT INTO schema_migrations (version) VALUES ('45');
 
