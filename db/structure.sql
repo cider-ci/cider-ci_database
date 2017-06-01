@@ -86,6 +86,21 @@ $$;
 
 
 --
+-- Name: clean_executor_events(); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION clean_executor_events() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+  DELETE FROM executor_events
+    WHERE created_at < NOW() - INTERVAL '3 days';
+  RETURN NULL;
+END;
+$$;
+
+
+--
 -- Name: clean_job_state_update_events(); Type: FUNCTION; Schema: public; Owner: -
 --
 
@@ -391,6 +406,29 @@ BEGIN
    INSERT INTO trial_state_update_events
     (trial_id, state) VALUES (New.id, NEW.state);
    RETURN NEW;
+END;
+$$;
+
+
+--
+-- Name: executor_event(); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION executor_event() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+  CASE
+    WHEN TG_OP = 'DELETE' THEN
+      INSERT INTO executor_events
+        (executor_id, event) VALUES (OLD.id, TG_OP);
+    WHEN TG_OP = 'TRUNCATE' THEN
+      INSERT INTO executor_events (event) VALUES (TG_OP);
+    ELSE
+      INSERT INTO executor_events
+        (executor_id, event) VALUES (NEW.id, TG_OP);
+  END CASE;
+  RETURN NULL;
 END;
 $$;
 
@@ -776,6 +814,18 @@ CREATE TABLE email_addresses (
 
 
 --
+-- Name: executor_events; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE executor_events (
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+    executor_id uuid,
+    event text,
+    created_at timestamp with time zone DEFAULT now() NOT NULL
+);
+
+
+--
 -- Name: executor_issues; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -800,7 +850,6 @@ CREATE TABLE executors (
     max_load double precision DEFAULT 1.0 NOT NULL,
     enabled boolean DEFAULT true NOT NULL,
     traits character varying[] DEFAULT '{}'::character varying[],
-    last_ping_at timestamp with time zone,
     created_at timestamp with time zone DEFAULT now() NOT NULL,
     updated_at timestamp with time zone DEFAULT now() NOT NULL,
     accepted_repositories character varying[] DEFAULT '{}'::character varying[],
@@ -808,6 +857,9 @@ CREATE TABLE executors (
     upload_trial_attachments boolean DEFAULT true NOT NULL,
     version text,
     temporary_overload_factor double precision DEFAULT 1.5 NOT NULL,
+    token_hash text,
+    token_part text,
+    description text,
     CONSTRAINT max_load_is_positive CHECK ((max_load >= (0)::double precision)),
     CONSTRAINT sensible_temoporary_overload_factor CHECK ((temporary_overload_factor >= (1.0)::double precision))
 );
@@ -885,7 +937,6 @@ CREATE VIEW executors_with_load AS
     executors.max_load,
     executors.enabled,
     executors.traits,
-    executors.last_ping_at,
     executors.created_at,
     executors.updated_at,
     executors.accepted_repositories,
@@ -893,6 +944,9 @@ CREATE VIEW executors_with_load AS
     executors.upload_trial_attachments,
     executors.version,
     executors.temporary_overload_factor,
+    executors.token_hash,
+    executors.token_part,
+    executors.description,
     executors_load.trials_count,
     executors_load.current_load,
     executors_load.executor_id,
@@ -1337,6 +1391,14 @@ ALTER TABLE ONLY email_addresses
 
 
 --
+-- Name: executor_events executor_events_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY executor_events
+    ADD CONSTRAINT executor_events_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: executor_issues executor_issues_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1738,6 +1800,13 @@ CREATE INDEX index_email_addresses_on_user_id ON email_addresses USING btree (us
 
 
 --
+-- Name: index_executor_events_on_executor_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_executor_events_on_executor_id ON executor_events USING btree (executor_id);
+
+
+--
 -- Name: index_executor_issues_on_executor_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -1756,6 +1825,13 @@ CREATE INDEX index_executors_on_accepted_repositories ON executors USING btree (
 --
 
 CREATE UNIQUE INDEX index_executors_on_name ON executors USING btree (name);
+
+
+--
+-- Name: index_executors_on_token_hash; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_executors_on_token_hash ON executors USING btree (token_hash);
 
 
 --
@@ -2104,6 +2180,13 @@ CREATE TRIGGER clean_branch_update_events AFTER INSERT ON branch_update_events F
 
 
 --
+-- Name: executor_events clean_executor_events; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER clean_executor_events AFTER INSERT ON executor_events FOR EACH STATEMENT EXECUTE PROCEDURE clean_executor_events();
+
+
+--
 -- Name: job_state_update_events clean_job_state_update_events; Type: TRIGGER; Schema: public; Owner: -
 --
 
@@ -2255,6 +2338,20 @@ CREATE TRIGGER create_trial_state_update_events_on_insert AFTER INSERT ON trials
 --
 
 CREATE TRIGGER create_trial_state_update_events_on_update AFTER UPDATE ON trials FOR EACH ROW WHEN (((old.state)::text IS DISTINCT FROM (new.state)::text)) EXECUTE PROCEDURE create_trial_state_update_events();
+
+
+--
+-- Name: executors executor_event; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER executor_event AFTER INSERT OR DELETE OR UPDATE ON executors FOR EACH ROW EXECUTE PROCEDURE executor_event();
+
+
+--
+-- Name: executors executor_event_truncate; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER executor_event_truncate AFTER TRUNCATE ON executors FOR EACH STATEMENT EXECUTE PROCEDURE executor_event();
 
 
 --
@@ -2844,6 +2941,8 @@ INSERT INTO schema_migrations (version) VALUES ('430');
 INSERT INTO schema_migrations (version) VALUES ('431');
 
 INSERT INTO schema_migrations (version) VALUES ('432');
+
+INSERT INTO schema_migrations (version) VALUES ('433');
 
 INSERT INTO schema_migrations (version) VALUES ('45');
 

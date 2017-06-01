@@ -68,7 +68,7 @@ module MigrationHelper extend ActiveSupport::Concern
 
   def add_or_replace_events_table table_name
 
-    entity_name = table_name.singularize
+    entity_name = table_name.to_s.singularize
 
     event_table_name = "#{entity_name}_events"
     trigger_name = event_table_name.singularize
