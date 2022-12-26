@@ -1,6 +1,6 @@
 require File.expand_path('../migration_helper.rb', __FILE__)
 
-class CreatePendingCreateTrialsEvaluations < ActiveRecord::Migration
+class CreatePendingCreateTrialsEvaluations < ActiveRecord::Migration[4.2]
   include MigrationHelper
   def change
     create_table :pending_create_trials_evaluations, id: :uuid do |t|

@@ -1,4 +1,4 @@
-class ConsolidateGithubAuthtokensIntoDb < ActiveRecord::Migration
+class ConsolidateGithubAuthtokensIntoDb < ActiveRecord::Migration[4.2]
   def change
     add_column :repositories, :foreign_api_endpoint, :text, null: false, default: ''
     add_column :repositories, :foreign_api_authtoken, :text, null: false, default: ''

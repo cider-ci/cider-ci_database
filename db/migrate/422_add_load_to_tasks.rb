@@ -1,4 +1,4 @@
-class AddLoadToTasks < ActiveRecord::Migration
+class AddLoadToTasks < ActiveRecord::Migration[4.2]
   def change
 
     execute 'DROP VIEW executors_with_load;'

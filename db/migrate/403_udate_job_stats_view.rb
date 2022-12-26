@@ -1,6 +1,6 @@
 require File.expand_path('../migration_helper.rb', __FILE__)
 
-class UdateJobStatsView < ActiveRecord::Migration
+class UdateJobStatsView < ActiveRecord::Migration[4.2]
   include MigrationHelper
 
   def change

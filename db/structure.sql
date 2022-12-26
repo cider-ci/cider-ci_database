@@ -1,16 +1,11 @@
---
--- PostgreSQL database dump
---
-
--- Dumped from database version 9.6.2
--- Dumped by pg_dump version 9.6.2
-
 SET statement_timeout = 0;
 SET lock_timeout = 0;
 SET idle_in_transaction_session_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
 SET check_function_bodies = false;
+SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
@@ -56,13 +51,11 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp" WITH SCHEMA public;
 COMMENT ON EXTENSION "uuid-ossp" IS 'generate universally unique identifiers (UUIDs)';
 
 
-SET search_path = public, pg_catalog;
-
 --
 -- Name: add_fast_forward_ancestors_to_branches_commits(uuid, character varying); Type: FUNCTION; Schema: public; Owner: -
 --
 
-CREATE FUNCTION add_fast_forward_ancestors_to_branches_commits(branch_id uuid, commit_id character varying) RETURNS void
+CREATE FUNCTION public.add_fast_forward_ancestors_to_branches_commits(branch_id uuid, commit_id character varying) RETURNS void
     LANGUAGE sql
     AS $$
       INSERT INTO branches_commits (branch_id,commit_id)
@@ -74,7 +67,7 @@ CREATE FUNCTION add_fast_forward_ancestors_to_branches_commits(branch_id uuid, c
 -- Name: clean_branch_update_events(); Type: FUNCTION; Schema: public; Owner: -
 --
 
-CREATE FUNCTION clean_branch_update_events() RETURNS trigger
+CREATE FUNCTION public.clean_branch_update_events() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
 BEGIN
@@ -89,7 +82,7 @@ $$;
 -- Name: clean_executor_events(); Type: FUNCTION; Schema: public; Owner: -
 --
 
-CREATE FUNCTION clean_executor_events() RETURNS trigger
+CREATE FUNCTION public.clean_executor_events() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
 BEGIN
@@ -104,7 +97,7 @@ $$;
 -- Name: clean_job_state_update_events(); Type: FUNCTION; Schema: public; Owner: -
 --
 
-CREATE FUNCTION clean_job_state_update_events() RETURNS trigger
+CREATE FUNCTION public.clean_job_state_update_events() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
 BEGIN
@@ -119,7 +112,7 @@ $$;
 -- Name: clean_repository_events(); Type: FUNCTION; Schema: public; Owner: -
 --
 
-CREATE FUNCTION clean_repository_events() RETURNS trigger
+CREATE FUNCTION public.clean_repository_events() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
 BEGIN
@@ -134,7 +127,7 @@ $$;
 -- Name: clean_script_state_update_events(); Type: FUNCTION; Schema: public; Owner: -
 --
 
-CREATE FUNCTION clean_script_state_update_events() RETURNS trigger
+CREATE FUNCTION public.clean_script_state_update_events() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
 BEGIN
@@ -149,7 +142,7 @@ $$;
 -- Name: clean_task_state_update_events(); Type: FUNCTION; Schema: public; Owner: -
 --
 
-CREATE FUNCTION clean_task_state_update_events() RETURNS trigger
+CREATE FUNCTION public.clean_task_state_update_events() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
 BEGIN
@@ -164,7 +157,7 @@ $$;
 -- Name: clean_trial_state_update_events(); Type: FUNCTION; Schema: public; Owner: -
 --
 
-CREATE FUNCTION clean_trial_state_update_events() RETURNS trigger
+CREATE FUNCTION public.clean_trial_state_update_events() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
 BEGIN
@@ -179,7 +172,7 @@ $$;
 -- Name: clean_user_events(); Type: FUNCTION; Schema: public; Owner: -
 --
 
-CREATE FUNCTION clean_user_events() RETURNS trigger
+CREATE FUNCTION public.clean_user_events() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
 BEGIN
@@ -194,7 +187,7 @@ $$;
 -- Name: create_branch_update_event(); Type: FUNCTION; Schema: public; Owner: -
 --
 
-CREATE FUNCTION create_branch_update_event() RETURNS trigger
+CREATE FUNCTION public.create_branch_update_event() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
 DECLARE
@@ -215,7 +208,7 @@ $$;
 -- Name: create_job_state_update_events(); Type: FUNCTION; Schema: public; Owner: -
 --
 
-CREATE FUNCTION create_job_state_update_events() RETURNS trigger
+CREATE FUNCTION public.create_job_state_update_events() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
 BEGIN
@@ -230,7 +223,7 @@ $$;
 -- Name: create_pending_create_trials_evaluations_on_tasks_insert(); Type: FUNCTION; Schema: public; Owner: -
 --
 
-CREATE FUNCTION create_pending_create_trials_evaluations_on_tasks_insert() RETURNS trigger
+CREATE FUNCTION public.create_pending_create_trials_evaluations_on_tasks_insert() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
 BEGIN
@@ -245,7 +238,7 @@ $$;
 -- Name: create_pending_create_trials_evaluations_on_trial_state_change(); Type: FUNCTION; Schema: public; Owner: -
 --
 
-CREATE FUNCTION create_pending_create_trials_evaluations_on_trial_state_change() RETURNS trigger
+CREATE FUNCTION public.create_pending_create_trials_evaluations_on_trial_state_change() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
 DECLARE
@@ -265,7 +258,7 @@ $$;
 -- Name: create_pending_job_evaluation_on_task_state_update_event_insert(); Type: FUNCTION; Schema: public; Owner: -
 --
 
-CREATE FUNCTION create_pending_job_evaluation_on_task_state_update_event_insert() RETURNS trigger
+CREATE FUNCTION public.create_pending_job_evaluation_on_task_state_update_event_insert() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
 DECLARE
@@ -285,7 +278,7 @@ $$;
 -- Name: create_pending_result_propagation(); Type: FUNCTION; Schema: public; Owner: -
 --
 
-CREATE FUNCTION create_pending_result_propagation() RETURNS trigger
+CREATE FUNCTION public.create_pending_result_propagation() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
 BEGIN
@@ -300,7 +293,7 @@ $$;
 -- Name: create_pending_task_evaluation_on_trial_state_update_event_inse(); Type: FUNCTION; Schema: public; Owner: -
 --
 
-CREATE FUNCTION create_pending_task_evaluation_on_trial_state_update_event_inse() RETURNS trigger
+CREATE FUNCTION public.create_pending_task_evaluation_on_trial_state_update_event_inse() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
 DECLARE
@@ -320,7 +313,7 @@ $$;
 -- Name: create_script_state_update_events(); Type: FUNCTION; Schema: public; Owner: -
 --
 
-CREATE FUNCTION create_script_state_update_events() RETURNS trigger
+CREATE FUNCTION public.create_script_state_update_events() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
 BEGIN
@@ -335,7 +328,7 @@ $$;
 -- Name: create_task_state_update_events(); Type: FUNCTION; Schema: public; Owner: -
 --
 
-CREATE FUNCTION create_task_state_update_events() RETURNS trigger
+CREATE FUNCTION public.create_task_state_update_events() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
 BEGIN
@@ -350,7 +343,7 @@ $$;
 -- Name: create_tree_id_notification_on_branch_change(); Type: FUNCTION; Schema: public; Owner: -
 --
 
-CREATE FUNCTION create_tree_id_notification_on_branch_change() RETURNS trigger
+CREATE FUNCTION public.create_tree_id_notification_on_branch_change() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
 DECLARE
@@ -371,7 +364,7 @@ $$;
 -- Name: create_tree_id_notification_on_job_state_change(); Type: FUNCTION; Schema: public; Owner: -
 --
 
-CREATE FUNCTION create_tree_id_notification_on_job_state_change() RETURNS trigger
+CREATE FUNCTION public.create_tree_id_notification_on_job_state_change() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
 BEGIN
@@ -399,7 +392,7 @@ $$;
 -- Name: create_trial_state_update_events(); Type: FUNCTION; Schema: public; Owner: -
 --
 
-CREATE FUNCTION create_trial_state_update_events() RETURNS trigger
+CREATE FUNCTION public.create_trial_state_update_events() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
 BEGIN
@@ -414,7 +407,7 @@ $$;
 -- Name: executor_event(); Type: FUNCTION; Schema: public; Owner: -
 --
 
-CREATE FUNCTION executor_event() RETURNS trigger
+CREATE FUNCTION public.executor_event() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
 BEGIN
@@ -437,7 +430,7 @@ $$;
 -- Name: fast_forward_ancestors_to_be_added_to_branches_commits(uuid, character varying); Type: FUNCTION; Schema: public; Owner: -
 --
 
-CREATE FUNCTION fast_forward_ancestors_to_be_added_to_branches_commits(branch_id uuid, commit_id character varying) RETURNS TABLE(branch_id uuid, commit_id character varying)
+CREATE FUNCTION public.fast_forward_ancestors_to_be_added_to_branches_commits(branch_id uuid, commit_id character varying) RETURNS TABLE(branch_id uuid, commit_id character varying)
     LANGUAGE sql
     AS $_$
         WITH RECURSIVE arcs(parent_id,child_id) AS
@@ -456,7 +449,7 @@ CREATE FUNCTION fast_forward_ancestors_to_be_added_to_branches_commits(branch_id
 -- Name: is_ancestor(character varying, character varying); Type: FUNCTION; Schema: public; Owner: -
 --
 
-CREATE FUNCTION is_ancestor(node character varying, possible_ancestor character varying) RETURNS boolean
+CREATE FUNCTION public.is_ancestor(node character varying, possible_ancestor character varying) RETURNS boolean
     LANGUAGE sql
     AS $_$
         SELECT ( EXISTS (SELECT * FROM with_ancestors(node) WHERE ancestor_id = possible_ancestor)
@@ -468,7 +461,7 @@ CREATE FUNCTION is_ancestor(node character varying, possible_ancestor character 
 -- Name: is_descendant(character varying, character varying); Type: FUNCTION; Schema: public; Owner: -
 --
 
-CREATE FUNCTION is_descendant(node character varying, possible_descendant character varying) RETURNS boolean
+CREATE FUNCTION public.is_descendant(node character varying, possible_descendant character varying) RETURNS boolean
     LANGUAGE sql
     AS $_$
         SELECT ( EXISTS (SELECT * FROM with_descendants(node) WHERE descendant_id = possible_descendant)
@@ -480,7 +473,7 @@ CREATE FUNCTION is_descendant(node character varying, possible_descendant charac
 -- Name: repository_event(); Type: FUNCTION; Schema: public; Owner: -
 --
 
-CREATE FUNCTION repository_event() RETURNS trigger
+CREATE FUNCTION public.repository_event() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
 BEGIN
@@ -503,7 +496,7 @@ $$;
 -- Name: update_branches_commits(uuid, character varying, character varying); Type: FUNCTION; Schema: public; Owner: -
 --
 
-CREATE FUNCTION update_branches_commits(branch_id uuid, new_commit_id character varying, old_commit_id character varying) RETURNS character varying
+CREATE FUNCTION public.update_branches_commits(branch_id uuid, new_commit_id character varying, old_commit_id character varying) RETURNS character varying
     LANGUAGE plpgsql
     AS $_$
       BEGIN
@@ -541,7 +534,7 @@ CREATE FUNCTION update_branches_commits(branch_id uuid, new_commit_id character 
 -- Name: update_updated_at_column(); Type: FUNCTION; Schema: public; Owner: -
 --
 
-CREATE FUNCTION update_updated_at_column() RETURNS trigger
+CREATE FUNCTION public.update_updated_at_column() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
 BEGIN
@@ -555,7 +548,7 @@ $$;
 -- Name: user_event(); Type: FUNCTION; Schema: public; Owner: -
 --
 
-CREATE FUNCTION user_event() RETURNS trigger
+CREATE FUNCTION public.user_event() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
 BEGIN
@@ -578,7 +571,7 @@ $$;
 -- Name: with_ancestors(character varying); Type: FUNCTION; Schema: public; Owner: -
 --
 
-CREATE FUNCTION with_ancestors(character varying) RETURNS TABLE(ancestor_id character varying)
+CREATE FUNCTION public.with_ancestors(character varying) RETURNS TABLE(ancestor_id character varying)
     LANGUAGE sql
     AS $_$
       WITH RECURSIVE arcs(parent_id,child_id) AS
@@ -594,7 +587,7 @@ CREATE FUNCTION with_ancestors(character varying) RETURNS TABLE(ancestor_id char
 -- Name: with_descendants(character varying); Type: FUNCTION; Schema: public; Owner: -
 --
 
-CREATE FUNCTION with_descendants(character varying) RETURNS TABLE(descendant_id character varying)
+CREATE FUNCTION public.with_descendants(character varying) RETURNS TABLE(descendant_id character varying)
     LANGUAGE sql
     AS $_$
       WITH RECURSIVE arcs(parent_id,child_id) AS
@@ -614,8 +607,8 @@ SET default_with_oids = false;
 -- Name: api_tokens; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE api_tokens (
-    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+CREATE TABLE public.api_tokens (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
     user_id uuid NOT NULL,
     token_hash character varying(45) NOT NULL,
     token_part character varying(5) NOT NULL,
@@ -635,11 +628,23 @@ CREATE TABLE api_tokens (
 
 
 --
+-- Name: ar_internal_metadata; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.ar_internal_metadata (
+    key character varying NOT NULL,
+    value character varying,
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    updated_at timestamp with time zone DEFAULT now() NOT NULL
+);
+
+
+--
 -- Name: branch_update_events; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE branch_update_events (
-    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+CREATE TABLE public.branch_update_events (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
     branch_id uuid NOT NULL,
     tree_id character varying(40) NOT NULL,
     created_at timestamp with time zone DEFAULT now() NOT NULL
@@ -650,8 +655,8 @@ CREATE TABLE branch_update_events (
 -- Name: branches; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE branches (
-    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+CREATE TABLE public.branches (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
     repository_id uuid NOT NULL,
     name character varying NOT NULL,
     current_commit_id character varying(40) NOT NULL,
@@ -664,7 +669,7 @@ CREATE TABLE branches (
 -- Name: branches_commits; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE branches_commits (
+CREATE TABLE public.branches_commits (
     branch_id uuid NOT NULL,
     commit_id character varying(40) NOT NULL
 );
@@ -674,7 +679,7 @@ CREATE TABLE branches_commits (
 -- Name: commit_arcs; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE commit_arcs (
+CREATE TABLE public.commit_arcs (
     parent_id character varying(40) NOT NULL,
     child_id character varying(40) NOT NULL
 );
@@ -684,7 +689,7 @@ CREATE TABLE commit_arcs (
 -- Name: commits; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE commits (
+CREATE TABLE public.commits (
     id character varying(40) NOT NULL,
     tree_id character varying(40),
     depth integer,
@@ -705,8 +710,8 @@ CREATE TABLE commits (
 -- Name: jobs; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE jobs (
-    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+CREATE TABLE public.jobs (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
     state character varying DEFAULT 'pending'::character varying NOT NULL,
     key text NOT NULL,
     name text NOT NULL,
@@ -731,15 +736,15 @@ CREATE TABLE jobs (
 -- Name: repositories; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE repositories (
-    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+CREATE TABLE public.repositories (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
     git_url text NOT NULL,
     name character varying,
     public_view_permission boolean DEFAULT false,
     created_at timestamp with time zone DEFAULT now() NOT NULL,
     updated_at timestamp with time zone DEFAULT now() NOT NULL,
-    update_notification_token uuid DEFAULT uuid_generate_v4(),
-    proxy_id uuid DEFAULT uuid_generate_v4() NOT NULL,
+    update_notification_token uuid DEFAULT public.uuid_generate_v4(),
+    proxy_id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
     branch_trigger_include_match text DEFAULT '^.*$'::text NOT NULL,
     branch_trigger_exclude_match text DEFAULT ''::text NOT NULL,
     remote_api_endpoint character varying,
@@ -769,8 +774,8 @@ CREATE TABLE repositories (
 -- Name: tree_issues; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE tree_issues (
-    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+CREATE TABLE public.tree_issues (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
     title text,
     description text,
     type character varying DEFAULT 'error'::character varying NOT NULL,
@@ -784,7 +789,7 @@ CREATE TABLE tree_issues (
 -- Name: commit_cache_signatures; Type: VIEW; Schema: public; Owner: -
 --
 
-CREATE VIEW commit_cache_signatures AS
+CREATE VIEW public.commit_cache_signatures AS
  SELECT commits.id AS commit_id,
     (count(tree_issues.*) > 0) AS has_tree_issues,
     md5(string_agg(DISTINCT (branches.updated_at)::text, ',
@@ -793,12 +798,12 @@ CREATE VIEW commit_cache_signatures AS
             '::text ORDER BY (repositories.updated_at)::text)) AS repositories_signature,
     md5(string_agg(DISTINCT (jobs.updated_at)::text, ',
             '::text ORDER BY (jobs.updated_at)::text)) AS jobs_signature
-   FROM (((((commits
-     LEFT JOIN branches_commits ON (((branches_commits.commit_id)::text = (commits.id)::text)))
-     LEFT JOIN branches ON ((branches_commits.branch_id = branches.id)))
-     LEFT JOIN jobs ON (((jobs.tree_id)::text = (commits.tree_id)::text)))
-     LEFT JOIN repositories ON ((branches.repository_id = repositories.id)))
-     LEFT JOIN tree_issues ON ((tree_issues.tree_id = (commits.tree_id)::text)))
+   FROM (((((public.commits
+     LEFT JOIN public.branches_commits ON (((branches_commits.commit_id)::text = (commits.id)::text)))
+     LEFT JOIN public.branches ON ((branches_commits.branch_id = branches.id)))
+     LEFT JOIN public.jobs ON (((jobs.tree_id)::text = (commits.tree_id)::text)))
+     LEFT JOIN public.repositories ON ((branches.repository_id = repositories.id)))
+     LEFT JOIN public.tree_issues ON ((tree_issues.tree_id = (commits.tree_id)::text)))
   GROUP BY commits.id;
 
 
@@ -806,7 +811,7 @@ CREATE VIEW commit_cache_signatures AS
 -- Name: email_addresses; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE email_addresses (
+CREATE TABLE public.email_addresses (
     user_id uuid,
     email_address character varying NOT NULL,
     "primary" boolean DEFAULT false NOT NULL
@@ -817,8 +822,8 @@ CREATE TABLE email_addresses (
 -- Name: executor_events; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE executor_events (
-    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+CREATE TABLE public.executor_events (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
     executor_id uuid,
     event text,
     created_at timestamp with time zone DEFAULT now() NOT NULL
@@ -829,8 +834,8 @@ CREATE TABLE executor_events (
 -- Name: executor_issues; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE executor_issues (
-    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+CREATE TABLE public.executor_issues (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
     title text,
     description text,
     type character varying DEFAULT 'error'::character varying NOT NULL,
@@ -844,8 +849,8 @@ CREATE TABLE executor_issues (
 -- Name: executors; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE executors (
-    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+CREATE TABLE public.executors (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
     name character varying NOT NULL,
     max_load double precision DEFAULT 1.0 NOT NULL,
     enabled boolean DEFAULT true NOT NULL,
@@ -869,8 +874,8 @@ CREATE TABLE executors (
 -- Name: tasks; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE tasks (
-    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+CREATE TABLE public.tasks (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
     job_id uuid NOT NULL,
     state character varying DEFAULT 'pending'::character varying NOT NULL,
     name text NOT NULL,
@@ -893,8 +898,8 @@ CREATE TABLE tasks (
 -- Name: trials; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE trials (
-    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+CREATE TABLE public.trials (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
     task_id uuid NOT NULL,
     executor_id uuid,
     error text,
@@ -907,7 +912,7 @@ CREATE TABLE trials (
     created_by uuid,
     aborted_by uuid,
     aborted_at timestamp with time zone,
-    token uuid DEFAULT uuid_generate_v4() NOT NULL,
+    token uuid DEFAULT public.uuid_generate_v4() NOT NULL,
     dispatched_at timestamp with time zone,
     CONSTRAINT check_trials_valid_state CHECK (((state)::text = ANY ((ARRAY['aborted'::character varying, 'aborting'::character varying, 'defective'::character varying, 'dispatching'::character varying, 'executing'::character varying, 'failed'::character varying, 'passed'::character varying, 'pending'::character varying])::text[])))
 );
@@ -917,13 +922,13 @@ CREATE TABLE trials (
 -- Name: executors_load; Type: VIEW; Schema: public; Owner: -
 --
 
-CREATE VIEW executors_load AS
+CREATE VIEW public.executors_load AS
  SELECT count(trials.id) AS trials_count,
     sum(COALESCE(tasks.load, (0.0)::double precision)) AS current_load,
     executors.id AS executor_id
-   FROM ((executors
-     LEFT JOIN trials ON (((trials.executor_id = executors.id) AND ((trials.state)::text = ANY ((ARRAY['aborting'::character varying, 'dispatching'::character varying, 'executing'::character varying])::text[])))))
-     LEFT JOIN tasks ON ((tasks.id = trials.task_id)))
+   FROM ((public.executors
+     LEFT JOIN public.trials ON (((trials.executor_id = executors.id) AND ((trials.state)::text = ANY ((ARRAY['aborting'::character varying, 'dispatching'::character varying, 'executing'::character varying])::text[])))))
+     LEFT JOIN public.tasks ON ((tasks.id = trials.task_id)))
   GROUP BY executors.id;
 
 
@@ -931,7 +936,7 @@ CREATE VIEW executors_load AS
 -- Name: executors_with_load; Type: VIEW; Schema: public; Owner: -
 --
 
-CREATE VIEW executors_with_load AS
+CREATE VIEW public.executors_with_load AS
  SELECT executors.id,
     executors.name,
     executors.max_load,
@@ -951,34 +956,32 @@ CREATE VIEW executors_with_load AS
     executors_load.current_load,
     executors_load.executor_id,
     (executors_load.current_load / executors.max_load) AS relative_load
-   FROM (executors
-     JOIN executors_load ON ((executors_load.executor_id = executors.id)));
+   FROM (public.executors
+     JOIN public.executors_load ON ((executors_load.executor_id = executors.id)));
 
 
 --
--- Name: job_cache_signatures; Type: TABLE; Schema: public; Owner: -
+-- Name: job_cache_signatures; Type: VIEW; Schema: public; Owner: -
 --
 
-CREATE TABLE job_cache_signatures (
-    job_id uuid,
-    branches_signature text,
-    commits_signature text,
-    job_issues_signature text,
-    job_issues_count bigint,
-    repositories_signature text,
-    tasks_signature text,
-    tree_attachments_count bigint
-);
-
-ALTER TABLE ONLY job_cache_signatures REPLICA IDENTITY NOTHING;
+CREATE VIEW public.job_cache_signatures AS
+SELECT
+    NULL::uuid AS job_id,
+    NULL::text AS branches_signature,
+    NULL::text AS commits_signature,
+    NULL::text AS job_issues_signature,
+    NULL::bigint AS job_issues_count,
+    NULL::text AS repositories_signature,
+    NULL::text AS tasks_signature,
+    NULL::bigint AS tree_attachments_count;
 
 
 --
 -- Name: job_issues; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE job_issues (
-    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+CREATE TABLE public.job_issues (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
     title text,
     description text,
     type character varying DEFAULT 'error'::character varying NOT NULL,
@@ -992,8 +995,8 @@ CREATE TABLE job_issues (
 -- Name: job_specifications; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE job_specifications (
-    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+CREATE TABLE public.job_specifications (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
     data jsonb
 );
 
@@ -1002,8 +1005,8 @@ CREATE TABLE job_specifications (
 -- Name: job_state_update_events; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE job_state_update_events (
-    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+CREATE TABLE public.job_state_update_events (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
     job_id uuid,
     state character varying,
     created_at timestamp with time zone DEFAULT now() NOT NULL,
@@ -1015,41 +1018,41 @@ CREATE TABLE job_state_update_events (
 -- Name: job_stats; Type: VIEW; Schema: public; Owner: -
 --
 
-CREATE VIEW job_stats AS
+CREATE VIEW public.job_stats AS
  SELECT jobs.id AS job_id,
     ( SELECT count(*) AS count
-           FROM tasks
+           FROM public.tasks
           WHERE (tasks.job_id = jobs.id)) AS total,
     ( SELECT count(*) AS count
-           FROM tasks
+           FROM public.tasks
           WHERE ((tasks.job_id = jobs.id) AND ((tasks.state)::text = 'passed'::text))) AS passed,
     ( SELECT count(*) AS count
-           FROM tasks
+           FROM public.tasks
           WHERE ((tasks.job_id = jobs.id) AND ((tasks.state)::text = 'executing'::text))) AS executing,
     ( SELECT count(*) AS count
-           FROM tasks
+           FROM public.tasks
           WHERE ((tasks.job_id = jobs.id) AND ((tasks.state)::text = 'pending'::text))) AS pending,
     ( SELECT count(*) AS count
-           FROM tasks
+           FROM public.tasks
           WHERE ((tasks.job_id = jobs.id) AND ((tasks.state)::text = 'aborting'::text))) AS aborting,
     ( SELECT count(*) AS count
-           FROM tasks
+           FROM public.tasks
           WHERE ((tasks.job_id = jobs.id) AND ((tasks.state)::text = 'aborted'::text))) AS aborted,
     ( SELECT count(*) AS count
-           FROM tasks
+           FROM public.tasks
           WHERE ((tasks.job_id = jobs.id) AND ((tasks.state)::text = 'defective'::text))) AS defective,
     ( SELECT count(*) AS count
-           FROM tasks
+           FROM public.tasks
           WHERE ((tasks.job_id = jobs.id) AND ((tasks.state)::text = 'failed'::text))) AS failed
-   FROM jobs;
+   FROM public.jobs;
 
 
 --
 -- Name: pending_create_trials_evaluations; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE pending_create_trials_evaluations (
-    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+CREATE TABLE public.pending_create_trials_evaluations (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
     task_id uuid NOT NULL,
     trial_state_update_event_id uuid,
     created_at timestamp with time zone DEFAULT now() NOT NULL
@@ -1060,8 +1063,8 @@ CREATE TABLE pending_create_trials_evaluations (
 -- Name: pending_job_evaluations; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE pending_job_evaluations (
-    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+CREATE TABLE public.pending_job_evaluations (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
     job_id uuid NOT NULL,
     task_state_update_event_id uuid,
     created_at timestamp with time zone DEFAULT now() NOT NULL
@@ -1072,8 +1075,8 @@ CREATE TABLE pending_job_evaluations (
 -- Name: pending_result_propagations; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE pending_result_propagations (
-    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+CREATE TABLE public.pending_result_propagations (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
     trial_id uuid NOT NULL,
     created_at timestamp with time zone DEFAULT now() NOT NULL
 );
@@ -1083,8 +1086,8 @@ CREATE TABLE pending_result_propagations (
 -- Name: pending_task_evaluations; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE pending_task_evaluations (
-    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+CREATE TABLE public.pending_task_evaluations (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
     task_id uuid NOT NULL,
     trial_state_update_event_id uuid,
     created_at timestamp with time zone DEFAULT now() NOT NULL
@@ -1095,8 +1098,8 @@ CREATE TABLE pending_task_evaluations (
 -- Name: repository_events; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE repository_events (
-    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+CREATE TABLE public.repository_events (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
     repository_id uuid,
     event text,
     created_at timestamp with time zone DEFAULT now() NOT NULL
@@ -1107,8 +1110,8 @@ CREATE TABLE repository_events (
 -- Name: repository_executor_permissions; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE repository_executor_permissions (
-    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+CREATE TABLE public.repository_executor_permissions (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
     executor_id uuid NOT NULL,
     repository_id uuid NOT NULL,
     execute boolean DEFAULT true NOT NULL
@@ -1119,8 +1122,8 @@ CREATE TABLE repository_executor_permissions (
 -- Name: repository_user_permissions; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE repository_user_permissions (
-    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+CREATE TABLE public.repository_user_permissions (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
     user_id uuid NOT NULL,
     repository_id uuid NOT NULL,
     execute boolean DEFAULT true NOT NULL,
@@ -1132,7 +1135,7 @@ CREATE TABLE repository_user_permissions (
 -- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE schema_migrations (
+CREATE TABLE public.schema_migrations (
     version character varying NOT NULL
 );
 
@@ -1141,8 +1144,8 @@ CREATE TABLE schema_migrations (
 -- Name: script_state_update_events; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE script_state_update_events (
-    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+CREATE TABLE public.script_state_update_events (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
     script_id uuid,
     state character varying,
     created_at timestamp with time zone DEFAULT now() NOT NULL,
@@ -1154,8 +1157,8 @@ CREATE TABLE script_state_update_events (
 -- Name: scripts; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE scripts (
-    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+CREATE TABLE public.scripts (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
     trial_id uuid NOT NULL,
     key character varying NOT NULL,
     state character varying DEFAULT 'pending'::character varying NOT NULL,
@@ -1180,7 +1183,7 @@ CREATE TABLE scripts (
     working_dir character varying(2048),
     script_file character varying(2048),
     wrapper_file character varying(2048),
-    issues jsonb DEFAULT '{}'::jsonb NOT NULL,
+    issues jsonb DEFAULT '"{}"'::jsonb NOT NULL,
     CONSTRAINT check_scripts_valid_state CHECK (((state)::text = ANY ((ARRAY['aborted'::character varying, 'defective'::character varying, 'executing'::character varying, 'failed'::character varying, 'passed'::character varying, 'pending'::character varying, 'skipped'::character varying, 'waiting'::character varying])::text[])))
 );
 
@@ -1189,7 +1192,7 @@ CREATE TABLE scripts (
 -- Name: submodules; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE submodules (
+CREATE TABLE public.submodules (
     submodule_commit_id character varying(40) NOT NULL,
     path text NOT NULL,
     commit_id character varying(40) NOT NULL
@@ -1200,8 +1203,8 @@ CREATE TABLE submodules (
 -- Name: task_specifications; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE task_specifications (
-    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+CREATE TABLE public.task_specifications (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
     data jsonb
 );
 
@@ -1210,8 +1213,8 @@ CREATE TABLE task_specifications (
 -- Name: task_state_update_events; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE task_state_update_events (
-    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+CREATE TABLE public.task_state_update_events (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
     task_id uuid,
     state character varying,
     created_at timestamp with time zone DEFAULT now() NOT NULL,
@@ -1223,8 +1226,8 @@ CREATE TABLE task_state_update_events (
 -- Name: tree_attachments; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE tree_attachments (
-    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+CREATE TABLE public.tree_attachments (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
     path text NOT NULL,
     content_length text,
     content_type text,
@@ -1239,8 +1242,8 @@ CREATE TABLE tree_attachments (
 -- Name: tree_id_notifications; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE tree_id_notifications (
-    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+CREATE TABLE public.tree_id_notifications (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
     tree_id character varying(40) NOT NULL,
     branch_id uuid,
     job_id uuid,
@@ -1254,8 +1257,8 @@ CREATE TABLE tree_id_notifications (
 -- Name: trial_attachments; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE trial_attachments (
-    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+CREATE TABLE public.trial_attachments (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
     path text NOT NULL,
     content_length text,
     content_type text,
@@ -1269,8 +1272,8 @@ CREATE TABLE trial_attachments (
 -- Name: trial_issues; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE trial_issues (
-    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+CREATE TABLE public.trial_issues (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
     title text,
     description text,
     type character varying DEFAULT 'error'::character varying NOT NULL,
@@ -1284,8 +1287,8 @@ CREATE TABLE trial_issues (
 -- Name: trial_state_update_events; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE trial_state_update_events (
-    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+CREATE TABLE public.trial_state_update_events (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
     trial_id uuid,
     state character varying,
     created_at timestamp with time zone DEFAULT now() NOT NULL,
@@ -1297,8 +1300,8 @@ CREATE TABLE trial_state_update_events (
 -- Name: user_events; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE user_events (
-    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+CREATE TABLE public.user_events (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
     user_id uuid,
     event text,
     created_at timestamp with time zone DEFAULT now() NOT NULL
@@ -1309,8 +1312,8 @@ CREATE TABLE user_events (
 -- Name: users; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE users (
-    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+CREATE TABLE public.users (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
     password_digest character varying,
     login character varying NOT NULL,
     is_admin boolean DEFAULT false NOT NULL,
@@ -1333,7 +1336,7 @@ CREATE TABLE users (
 -- Name: welcome_page_settings; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE welcome_page_settings (
+CREATE TABLE public.welcome_page_settings (
     id integer NOT NULL,
     welcome_message text,
     created_at timestamp with time zone DEFAULT now() NOT NULL,
@@ -1346,15 +1349,23 @@ CREATE TABLE welcome_page_settings (
 -- Name: api_tokens api_tokens_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY api_tokens
+ALTER TABLE ONLY public.api_tokens
     ADD CONSTRAINT api_tokens_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: ar_internal_metadata ar_internal_metadata_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.ar_internal_metadata
+    ADD CONSTRAINT ar_internal_metadata_pkey PRIMARY KEY (key);
 
 
 --
 -- Name: branch_update_events branch_update_events_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY branch_update_events
+ALTER TABLE ONLY public.branch_update_events
     ADD CONSTRAINT branch_update_events_pkey PRIMARY KEY (id);
 
 
@@ -1362,7 +1373,7 @@ ALTER TABLE ONLY branch_update_events
 -- Name: branches_commits branches_commits_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY branches_commits
+ALTER TABLE ONLY public.branches_commits
     ADD CONSTRAINT branches_commits_pkey PRIMARY KEY (commit_id, branch_id);
 
 
@@ -1370,7 +1381,7 @@ ALTER TABLE ONLY branches_commits
 -- Name: branches branches_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY branches
+ALTER TABLE ONLY public.branches
     ADD CONSTRAINT branches_pkey PRIMARY KEY (id);
 
 
@@ -1378,7 +1389,7 @@ ALTER TABLE ONLY branches
 -- Name: commits commits_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY commits
+ALTER TABLE ONLY public.commits
     ADD CONSTRAINT commits_pkey PRIMARY KEY (id);
 
 
@@ -1386,7 +1397,7 @@ ALTER TABLE ONLY commits
 -- Name: email_addresses email_addresses_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY email_addresses
+ALTER TABLE ONLY public.email_addresses
     ADD CONSTRAINT email_addresses_pkey PRIMARY KEY (email_address);
 
 
@@ -1394,7 +1405,7 @@ ALTER TABLE ONLY email_addresses
 -- Name: executor_events executor_events_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY executor_events
+ALTER TABLE ONLY public.executor_events
     ADD CONSTRAINT executor_events_pkey PRIMARY KEY (id);
 
 
@@ -1402,7 +1413,7 @@ ALTER TABLE ONLY executor_events
 -- Name: executor_issues executor_issues_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY executor_issues
+ALTER TABLE ONLY public.executor_issues
     ADD CONSTRAINT executor_issues_pkey PRIMARY KEY (id);
 
 
@@ -1410,7 +1421,7 @@ ALTER TABLE ONLY executor_issues
 -- Name: executors executors_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY executors
+ALTER TABLE ONLY public.executors
     ADD CONSTRAINT executors_pkey PRIMARY KEY (id);
 
 
@@ -1418,7 +1429,7 @@ ALTER TABLE ONLY executors
 -- Name: job_issues job_issues_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY job_issues
+ALTER TABLE ONLY public.job_issues
     ADD CONSTRAINT job_issues_pkey PRIMARY KEY (id);
 
 
@@ -1426,7 +1437,7 @@ ALTER TABLE ONLY job_issues
 -- Name: job_specifications job_specifications_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY job_specifications
+ALTER TABLE ONLY public.job_specifications
     ADD CONSTRAINT job_specifications_pkey PRIMARY KEY (id);
 
 
@@ -1434,7 +1445,7 @@ ALTER TABLE ONLY job_specifications
 -- Name: job_state_update_events job_state_update_events_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY job_state_update_events
+ALTER TABLE ONLY public.job_state_update_events
     ADD CONSTRAINT job_state_update_events_pkey PRIMARY KEY (id);
 
 
@@ -1442,7 +1453,7 @@ ALTER TABLE ONLY job_state_update_events
 -- Name: jobs jobs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY jobs
+ALTER TABLE ONLY public.jobs
     ADD CONSTRAINT jobs_pkey PRIMARY KEY (id);
 
 
@@ -1450,7 +1461,7 @@ ALTER TABLE ONLY jobs
 -- Name: pending_create_trials_evaluations pending_create_trials_evaluations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY pending_create_trials_evaluations
+ALTER TABLE ONLY public.pending_create_trials_evaluations
     ADD CONSTRAINT pending_create_trials_evaluations_pkey PRIMARY KEY (id);
 
 
@@ -1458,7 +1469,7 @@ ALTER TABLE ONLY pending_create_trials_evaluations
 -- Name: pending_job_evaluations pending_job_evaluations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY pending_job_evaluations
+ALTER TABLE ONLY public.pending_job_evaluations
     ADD CONSTRAINT pending_job_evaluations_pkey PRIMARY KEY (id);
 
 
@@ -1466,7 +1477,7 @@ ALTER TABLE ONLY pending_job_evaluations
 -- Name: pending_result_propagations pending_result_propagations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY pending_result_propagations
+ALTER TABLE ONLY public.pending_result_propagations
     ADD CONSTRAINT pending_result_propagations_pkey PRIMARY KEY (id);
 
 
@@ -1474,7 +1485,7 @@ ALTER TABLE ONLY pending_result_propagations
 -- Name: pending_task_evaluations pending_task_evaluations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY pending_task_evaluations
+ALTER TABLE ONLY public.pending_task_evaluations
     ADD CONSTRAINT pending_task_evaluations_pkey PRIMARY KEY (id);
 
 
@@ -1482,7 +1493,7 @@ ALTER TABLE ONLY pending_task_evaluations
 -- Name: repositories repositories_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY repositories
+ALTER TABLE ONLY public.repositories
     ADD CONSTRAINT repositories_pkey PRIMARY KEY (id);
 
 
@@ -1490,7 +1501,7 @@ ALTER TABLE ONLY repositories
 -- Name: repository_events repository_events_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY repository_events
+ALTER TABLE ONLY public.repository_events
     ADD CONSTRAINT repository_events_pkey PRIMARY KEY (id);
 
 
@@ -1498,7 +1509,7 @@ ALTER TABLE ONLY repository_events
 -- Name: repository_executor_permissions repository_executor_permissions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY repository_executor_permissions
+ALTER TABLE ONLY public.repository_executor_permissions
     ADD CONSTRAINT repository_executor_permissions_pkey PRIMARY KEY (id);
 
 
@@ -1506,15 +1517,23 @@ ALTER TABLE ONLY repository_executor_permissions
 -- Name: repository_user_permissions repository_user_permissions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY repository_user_permissions
+ALTER TABLE ONLY public.repository_user_permissions
     ADD CONSTRAINT repository_user_permissions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: schema_migrations schema_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.schema_migrations
+    ADD CONSTRAINT schema_migrations_pkey PRIMARY KEY (version);
 
 
 --
 -- Name: script_state_update_events script_state_update_events_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY script_state_update_events
+ALTER TABLE ONLY public.script_state_update_events
     ADD CONSTRAINT script_state_update_events_pkey PRIMARY KEY (id);
 
 
@@ -1522,7 +1541,7 @@ ALTER TABLE ONLY script_state_update_events
 -- Name: scripts scripts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY scripts
+ALTER TABLE ONLY public.scripts
     ADD CONSTRAINT scripts_pkey PRIMARY KEY (id);
 
 
@@ -1530,7 +1549,7 @@ ALTER TABLE ONLY scripts
 -- Name: submodules submodules_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY submodules
+ALTER TABLE ONLY public.submodules
     ADD CONSTRAINT submodules_pkey PRIMARY KEY (commit_id, path);
 
 
@@ -1538,7 +1557,7 @@ ALTER TABLE ONLY submodules
 -- Name: task_specifications task_specifications_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY task_specifications
+ALTER TABLE ONLY public.task_specifications
     ADD CONSTRAINT task_specifications_pkey PRIMARY KEY (id);
 
 
@@ -1546,7 +1565,7 @@ ALTER TABLE ONLY task_specifications
 -- Name: task_state_update_events task_state_update_events_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY task_state_update_events
+ALTER TABLE ONLY public.task_state_update_events
     ADD CONSTRAINT task_state_update_events_pkey PRIMARY KEY (id);
 
 
@@ -1554,7 +1573,7 @@ ALTER TABLE ONLY task_state_update_events
 -- Name: tasks tasks_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY tasks
+ALTER TABLE ONLY public.tasks
     ADD CONSTRAINT tasks_pkey PRIMARY KEY (id);
 
 
@@ -1562,7 +1581,7 @@ ALTER TABLE ONLY tasks
 -- Name: tree_attachments tree_attachments_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY tree_attachments
+ALTER TABLE ONLY public.tree_attachments
     ADD CONSTRAINT tree_attachments_pkey PRIMARY KEY (id);
 
 
@@ -1570,7 +1589,7 @@ ALTER TABLE ONLY tree_attachments
 -- Name: tree_id_notifications tree_id_notifications_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY tree_id_notifications
+ALTER TABLE ONLY public.tree_id_notifications
     ADD CONSTRAINT tree_id_notifications_pkey PRIMARY KEY (id);
 
 
@@ -1578,7 +1597,7 @@ ALTER TABLE ONLY tree_id_notifications
 -- Name: tree_issues tree_issues_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY tree_issues
+ALTER TABLE ONLY public.tree_issues
     ADD CONSTRAINT tree_issues_pkey PRIMARY KEY (id);
 
 
@@ -1586,7 +1605,7 @@ ALTER TABLE ONLY tree_issues
 -- Name: trial_attachments trial_attachments_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY trial_attachments
+ALTER TABLE ONLY public.trial_attachments
     ADD CONSTRAINT trial_attachments_pkey PRIMARY KEY (id);
 
 
@@ -1594,7 +1613,7 @@ ALTER TABLE ONLY trial_attachments
 -- Name: trial_issues trial_issues_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY trial_issues
+ALTER TABLE ONLY public.trial_issues
     ADD CONSTRAINT trial_issues_pkey PRIMARY KEY (id);
 
 
@@ -1602,7 +1621,7 @@ ALTER TABLE ONLY trial_issues
 -- Name: trial_state_update_events trial_state_update_events_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY trial_state_update_events
+ALTER TABLE ONLY public.trial_state_update_events
     ADD CONSTRAINT trial_state_update_events_pkey PRIMARY KEY (id);
 
 
@@ -1610,7 +1629,7 @@ ALTER TABLE ONLY trial_state_update_events
 -- Name: trials trials_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY trials
+ALTER TABLE ONLY public.trials
     ADD CONSTRAINT trials_pkey PRIMARY KEY (id);
 
 
@@ -1618,7 +1637,7 @@ ALTER TABLE ONLY trials
 -- Name: user_events user_events_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY user_events
+ALTER TABLE ONLY public.user_events
     ADD CONSTRAINT user_events_pkey PRIMARY KEY (id);
 
 
@@ -1626,7 +1645,7 @@ ALTER TABLE ONLY user_events
 -- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY users
+ALTER TABLE ONLY public.users
     ADD CONSTRAINT users_pkey PRIMARY KEY (id);
 
 
@@ -1634,7 +1653,7 @@ ALTER TABLE ONLY users
 -- Name: welcome_page_settings welcome_page_settings_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY welcome_page_settings
+ALTER TABLE ONLY public.welcome_page_settings
     ADD CONSTRAINT welcome_page_settings_pkey PRIMARY KEY (id);
 
 
@@ -1642,512 +1661,505 @@ ALTER TABLE ONLY welcome_page_settings
 -- Name: branches_lower_name_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX branches_lower_name_idx ON branches USING btree (lower((name)::text));
+CREATE INDEX branches_lower_name_idx ON public.branches USING btree (lower((name)::text));
 
 
 --
 -- Name: commits_to_tsvector_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX commits_to_tsvector_idx ON commits USING gin (to_tsvector('english'::regconfig, body));
+CREATE INDEX commits_to_tsvector_idx ON public.commits USING gin (to_tsvector('english'::regconfig, body));
 
 
 --
 -- Name: commits_to_tsvector_idx1; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX commits_to_tsvector_idx1 ON commits USING gin (to_tsvector('english'::regconfig, (author_name)::text));
+CREATE INDEX commits_to_tsvector_idx1 ON public.commits USING gin (to_tsvector('english'::regconfig, (author_name)::text));
 
 
 --
 -- Name: commits_to_tsvector_idx2; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX commits_to_tsvector_idx2 ON commits USING gin (to_tsvector('english'::regconfig, (author_email)::text));
+CREATE INDEX commits_to_tsvector_idx2 ON public.commits USING gin (to_tsvector('english'::regconfig, (author_email)::text));
 
 
 --
 -- Name: commits_to_tsvector_idx3; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX commits_to_tsvector_idx3 ON commits USING gin (to_tsvector('english'::regconfig, (committer_name)::text));
+CREATE INDEX commits_to_tsvector_idx3 ON public.commits USING gin (to_tsvector('english'::regconfig, (committer_name)::text));
 
 
 --
 -- Name: commits_to_tsvector_idx4; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX commits_to_tsvector_idx4 ON commits USING gin (to_tsvector('english'::regconfig, (committer_email)::text));
+CREATE INDEX commits_to_tsvector_idx4 ON public.commits USING gin (to_tsvector('english'::regconfig, (committer_email)::text));
 
 
 --
 -- Name: commits_to_tsvector_idx5; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX commits_to_tsvector_idx5 ON commits USING gin (to_tsvector('english'::regconfig, subject));
+CREATE INDEX commits_to_tsvector_idx5 ON public.commits USING gin (to_tsvector('english'::regconfig, subject));
 
 
 --
 -- Name: commits_to_tsvector_idx6; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX commits_to_tsvector_idx6 ON commits USING gin (to_tsvector('english'::regconfig, body));
+CREATE INDEX commits_to_tsvector_idx6 ON public.commits USING gin (to_tsvector('english'::regconfig, body));
 
 
 --
 -- Name: idx_jobs_tree-id_job-specification-id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX "idx_jobs_tree-id_job-specification-id" ON jobs USING btree (tree_id, job_specification_id);
+CREATE UNIQUE INDEX "idx_jobs_tree-id_job-specification-id" ON public.jobs USING btree (tree_id, job_specification_id);
 
 
 --
 -- Name: idx_jobs_tree-id_key; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX "idx_jobs_tree-id_key" ON jobs USING btree (tree_id, key);
+CREATE UNIQUE INDEX "idx_jobs_tree-id_key" ON public.jobs USING btree (tree_id, key);
 
 
 --
 -- Name: idx_jobs_tree-id_name; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX "idx_jobs_tree-id_name" ON jobs USING btree (tree_id, name);
+CREATE UNIQUE INDEX "idx_jobs_tree-id_name" ON public.jobs USING btree (tree_id, name);
 
 
 --
 -- Name: index_api_tokens_on_token_hash; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_api_tokens_on_token_hash ON api_tokens USING btree (token_hash);
+CREATE UNIQUE INDEX index_api_tokens_on_token_hash ON public.api_tokens USING btree (token_hash);
 
 
 --
 -- Name: index_branch_update_events_on_created_at; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_branch_update_events_on_created_at ON branch_update_events USING btree (created_at);
+CREATE INDEX index_branch_update_events_on_created_at ON public.branch_update_events USING btree (created_at);
 
 
 --
 -- Name: index_branches_on_name; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_branches_on_name ON branches USING btree (name);
+CREATE INDEX index_branches_on_name ON public.branches USING btree (name);
 
 
 --
 -- Name: index_branches_on_repository_id_and_name; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_branches_on_repository_id_and_name ON branches USING btree (repository_id, name);
+CREATE UNIQUE INDEX index_branches_on_repository_id_and_name ON public.branches USING btree (repository_id, name);
 
 
 --
 -- Name: index_commit_arcs_on_child_id_and_parent_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_commit_arcs_on_child_id_and_parent_id ON commit_arcs USING btree (child_id, parent_id);
+CREATE INDEX index_commit_arcs_on_child_id_and_parent_id ON public.commit_arcs USING btree (child_id, parent_id);
 
 
 --
 -- Name: index_commit_arcs_on_parent_id_and_child_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_commit_arcs_on_parent_id_and_child_id ON commit_arcs USING btree (parent_id, child_id);
+CREATE UNIQUE INDEX index_commit_arcs_on_parent_id_and_child_id ON public.commit_arcs USING btree (parent_id, child_id);
 
 
 --
 -- Name: index_commits_on_author_date; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_commits_on_author_date ON commits USING btree (author_date);
+CREATE INDEX index_commits_on_author_date ON public.commits USING btree (author_date);
 
 
 --
 -- Name: index_commits_on_committer_date; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_commits_on_committer_date ON commits USING btree (committer_date);
+CREATE INDEX index_commits_on_committer_date ON public.commits USING btree (committer_date);
 
 
 --
 -- Name: index_commits_on_depth; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_commits_on_depth ON commits USING btree (depth);
+CREATE INDEX index_commits_on_depth ON public.commits USING btree (depth);
 
 
 --
 -- Name: index_commits_on_tree_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_commits_on_tree_id ON commits USING btree (tree_id);
+CREATE INDEX index_commits_on_tree_id ON public.commits USING btree (tree_id);
 
 
 --
 -- Name: index_commits_on_updated_at; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_commits_on_updated_at ON commits USING btree (updated_at);
+CREATE INDEX index_commits_on_updated_at ON public.commits USING btree (updated_at);
 
 
 --
 -- Name: index_email_addresses_on_user_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_email_addresses_on_user_id ON email_addresses USING btree (user_id);
+CREATE INDEX index_email_addresses_on_user_id ON public.email_addresses USING btree (user_id);
 
 
 --
 -- Name: index_executor_events_on_executor_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_executor_events_on_executor_id ON executor_events USING btree (executor_id);
+CREATE INDEX index_executor_events_on_executor_id ON public.executor_events USING btree (executor_id);
 
 
 --
 -- Name: index_executor_issues_on_executor_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_executor_issues_on_executor_id ON executor_issues USING btree (executor_id);
+CREATE INDEX index_executor_issues_on_executor_id ON public.executor_issues USING btree (executor_id);
 
 
 --
 -- Name: index_executors_on_accepted_repositories; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_executors_on_accepted_repositories ON executors USING btree (accepted_repositories);
+CREATE INDEX index_executors_on_accepted_repositories ON public.executors USING btree (accepted_repositories);
 
 
 --
 -- Name: index_executors_on_name; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_executors_on_name ON executors USING btree (name);
+CREATE UNIQUE INDEX index_executors_on_name ON public.executors USING btree (name);
 
 
 --
 -- Name: index_executors_on_token_hash; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_executors_on_token_hash ON executors USING btree (token_hash);
+CREATE UNIQUE INDEX index_executors_on_token_hash ON public.executors USING btree (token_hash);
 
 
 --
 -- Name: index_executors_on_traits; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_executors_on_traits ON executors USING btree (traits);
+CREATE INDEX index_executors_on_traits ON public.executors USING btree (traits);
 
 
 --
 -- Name: index_job_issues_on_job_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_job_issues_on_job_id ON job_issues USING btree (job_id);
+CREATE INDEX index_job_issues_on_job_id ON public.job_issues USING btree (job_id);
 
 
 --
 -- Name: index_job_state_update_events_on_created_at; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_job_state_update_events_on_created_at ON job_state_update_events USING btree (created_at);
+CREATE INDEX index_job_state_update_events_on_created_at ON public.job_state_update_events USING btree (created_at);
 
 
 --
 -- Name: index_job_state_update_events_on_job_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_job_state_update_events_on_job_id ON job_state_update_events USING btree (job_id);
+CREATE INDEX index_job_state_update_events_on_job_id ON public.job_state_update_events USING btree (job_id);
 
 
 --
 -- Name: index_jobs_on_job_specification_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_jobs_on_job_specification_id ON jobs USING btree (job_specification_id);
+CREATE INDEX index_jobs_on_job_specification_id ON public.jobs USING btree (job_specification_id);
 
 
 --
 -- Name: index_jobs_on_key; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_jobs_on_key ON jobs USING btree (key);
+CREATE INDEX index_jobs_on_key ON public.jobs USING btree (key);
 
 
 --
 -- Name: index_jobs_on_name; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_jobs_on_name ON jobs USING btree (name);
+CREATE INDEX index_jobs_on_name ON public.jobs USING btree (name);
 
 
 --
 -- Name: index_jobs_on_tree_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_jobs_on_tree_id ON jobs USING btree (tree_id);
+CREATE INDEX index_jobs_on_tree_id ON public.jobs USING btree (tree_id);
 
 
 --
 -- Name: index_pending_create_trials_evaluations_on_created_at; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_pending_create_trials_evaluations_on_created_at ON pending_create_trials_evaluations USING btree (created_at);
+CREATE INDEX index_pending_create_trials_evaluations_on_created_at ON public.pending_create_trials_evaluations USING btree (created_at);
 
 
 --
 -- Name: index_pending_create_trials_evaluations_on_task_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_pending_create_trials_evaluations_on_task_id ON pending_create_trials_evaluations USING btree (task_id);
+CREATE INDEX index_pending_create_trials_evaluations_on_task_id ON public.pending_create_trials_evaluations USING btree (task_id);
 
 
 --
 -- Name: index_pending_job_evaluations_on_created_at; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_pending_job_evaluations_on_created_at ON pending_job_evaluations USING btree (created_at);
+CREATE INDEX index_pending_job_evaluations_on_created_at ON public.pending_job_evaluations USING btree (created_at);
 
 
 --
 -- Name: index_pending_result_propagations_on_created_at; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_pending_result_propagations_on_created_at ON pending_result_propagations USING btree (created_at);
+CREATE INDEX index_pending_result_propagations_on_created_at ON public.pending_result_propagations USING btree (created_at);
 
 
 --
 -- Name: index_pending_task_evaluations_on_created_at; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_pending_task_evaluations_on_created_at ON pending_task_evaluations USING btree (created_at);
+CREATE INDEX index_pending_task_evaluations_on_created_at ON public.pending_task_evaluations USING btree (created_at);
 
 
 --
 -- Name: index_repositories_on_created_at; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_repositories_on_created_at ON repositories USING btree (created_at);
+CREATE INDEX index_repositories_on_created_at ON public.repositories USING btree (created_at);
 
 
 --
 -- Name: index_repositories_on_git_url; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_repositories_on_git_url ON repositories USING btree (git_url);
+CREATE UNIQUE INDEX index_repositories_on_git_url ON public.repositories USING btree (git_url);
 
 
 --
 -- Name: index_repositories_on_update_notification_token; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_repositories_on_update_notification_token ON repositories USING btree (update_notification_token);
+CREATE INDEX index_repositories_on_update_notification_token ON public.repositories USING btree (update_notification_token);
 
 
 --
 -- Name: index_repositories_on_updated_at; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_repositories_on_updated_at ON repositories USING btree (updated_at);
+CREATE INDEX index_repositories_on_updated_at ON public.repositories USING btree (updated_at);
 
 
 --
 -- Name: index_repository_events_on_repository_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_repository_events_on_repository_id ON repository_events USING btree (repository_id);
+CREATE INDEX index_repository_events_on_repository_id ON public.repository_events USING btree (repository_id);
 
 
 --
 -- Name: index_script_state_update_events_on_created_at; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_script_state_update_events_on_created_at ON script_state_update_events USING btree (created_at);
+CREATE INDEX index_script_state_update_events_on_created_at ON public.script_state_update_events USING btree (created_at);
 
 
 --
 -- Name: index_script_state_update_events_on_script_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_script_state_update_events_on_script_id ON script_state_update_events USING btree (script_id);
+CREATE INDEX index_script_state_update_events_on_script_id ON public.script_state_update_events USING btree (script_id);
 
 
 --
 -- Name: index_scripts_on_issues; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_scripts_on_issues ON scripts USING btree (issues);
+CREATE INDEX index_scripts_on_issues ON public.scripts USING btree (issues);
 
 
 --
 -- Name: index_scripts_on_trial_id_and_key; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_scripts_on_trial_id_and_key ON scripts USING btree (trial_id, key);
+CREATE UNIQUE INDEX index_scripts_on_trial_id_and_key ON public.scripts USING btree (trial_id, key);
 
 
 --
 -- Name: index_submodules_on_commit_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_submodules_on_commit_id ON submodules USING btree (commit_id);
+CREATE INDEX index_submodules_on_commit_id ON public.submodules USING btree (commit_id);
 
 
 --
 -- Name: index_submodules_on_submodule_commit_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_submodules_on_submodule_commit_id ON submodules USING btree (submodule_commit_id);
+CREATE INDEX index_submodules_on_submodule_commit_id ON public.submodules USING btree (submodule_commit_id);
 
 
 --
 -- Name: index_task_state_update_events_on_created_at; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_task_state_update_events_on_created_at ON task_state_update_events USING btree (created_at);
+CREATE INDEX index_task_state_update_events_on_created_at ON public.task_state_update_events USING btree (created_at);
 
 
 --
 -- Name: index_task_state_update_events_on_task_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_task_state_update_events_on_task_id ON task_state_update_events USING btree (task_id);
+CREATE INDEX index_task_state_update_events_on_task_id ON public.task_state_update_events USING btree (task_id);
 
 
 --
 -- Name: index_tasks_on_exclusive_global_resources; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_tasks_on_exclusive_global_resources ON tasks USING btree (exclusive_global_resources);
+CREATE INDEX index_tasks_on_exclusive_global_resources ON public.tasks USING btree (exclusive_global_resources);
 
 
 --
 -- Name: index_tasks_on_job_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_tasks_on_job_id ON tasks USING btree (job_id);
+CREATE INDEX index_tasks_on_job_id ON public.tasks USING btree (job_id);
 
 
 --
 -- Name: index_tasks_on_job_id_and_name; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_tasks_on_job_id_and_name ON tasks USING btree (job_id, name);
+CREATE UNIQUE INDEX index_tasks_on_job_id_and_name ON public.tasks USING btree (job_id, name);
 
 
 --
 -- Name: index_tasks_on_task_specification_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_tasks_on_task_specification_id ON tasks USING btree (task_specification_id);
+CREATE INDEX index_tasks_on_task_specification_id ON public.tasks USING btree (task_specification_id);
 
 
 --
 -- Name: index_tasks_on_traits; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_tasks_on_traits ON tasks USING btree (traits);
+CREATE INDEX index_tasks_on_traits ON public.tasks USING btree (traits);
 
 
 --
 -- Name: index_tree_attachments_on_tree_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_tree_attachments_on_tree_id ON tree_attachments USING btree (tree_id);
+CREATE INDEX index_tree_attachments_on_tree_id ON public.tree_attachments USING btree (tree_id);
 
 
 --
 -- Name: index_tree_attachments_on_tree_id_and_path; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_tree_attachments_on_tree_id_and_path ON tree_attachments USING btree (tree_id, path);
+CREATE UNIQUE INDEX index_tree_attachments_on_tree_id_and_path ON public.tree_attachments USING btree (tree_id, path);
 
 
 --
 -- Name: index_tree_issues_on_tree_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_tree_issues_on_tree_id ON tree_issues USING btree (tree_id);
+CREATE INDEX index_tree_issues_on_tree_id ON public.tree_issues USING btree (tree_id);
 
 
 --
 -- Name: index_trial_attachments_on_trial_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_trial_attachments_on_trial_id ON trial_attachments USING btree (trial_id);
+CREATE INDEX index_trial_attachments_on_trial_id ON public.trial_attachments USING btree (trial_id);
 
 
 --
 -- Name: index_trial_attachments_on_trial_id_and_path; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_trial_attachments_on_trial_id_and_path ON trial_attachments USING btree (trial_id, path);
+CREATE UNIQUE INDEX index_trial_attachments_on_trial_id_and_path ON public.trial_attachments USING btree (trial_id, path);
 
 
 --
 -- Name: index_trial_issues_on_trial_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_trial_issues_on_trial_id ON trial_issues USING btree (trial_id);
+CREATE INDEX index_trial_issues_on_trial_id ON public.trial_issues USING btree (trial_id);
 
 
 --
 -- Name: index_trial_state_update_events_on_created_at; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_trial_state_update_events_on_created_at ON trial_state_update_events USING btree (created_at);
+CREATE INDEX index_trial_state_update_events_on_created_at ON public.trial_state_update_events USING btree (created_at);
 
 
 --
 -- Name: index_trial_state_update_events_on_trial_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_trial_state_update_events_on_trial_id ON trial_state_update_events USING btree (trial_id);
+CREATE INDEX index_trial_state_update_events_on_trial_id ON public.trial_state_update_events USING btree (trial_id);
 
 
 --
 -- Name: index_trials_on_state; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_trials_on_state ON trials USING btree (state);
+CREATE INDEX index_trials_on_state ON public.trials USING btree (state);
 
 
 --
 -- Name: index_trials_on_task_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_trials_on_task_id ON trials USING btree (task_id);
+CREATE INDEX index_trials_on_task_id ON public.trials USING btree (task_id);
 
 
 --
 -- Name: index_user_events_on_user_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_user_events_on_user_id ON user_events USING btree (user_id);
-
-
---
--- Name: unique_schema_migrations; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX unique_schema_migrations ON schema_migrations USING btree (version);
+CREATE INDEX index_user_events_on_user_id ON public.user_events USING btree (user_id);
 
 
 --
 -- Name: user_lower_login_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX user_lower_login_idx ON users USING btree (lower((login)::text));
+CREATE INDEX user_lower_login_idx ON public.users USING btree (lower((login)::text));
 
 
 --
 -- Name: job_cache_signatures _RETURN; Type: RULE; Schema: public; Owner: -
 --
 
-CREATE RULE "_RETURN" AS
-    ON SELECT TO job_cache_signatures DO INSTEAD  SELECT jobs.id AS job_id,
+CREATE OR REPLACE VIEW public.job_cache_signatures AS
+ SELECT jobs.id AS job_id,
     md5(string_agg(DISTINCT (branches.updated_at)::text, ',
              '::text ORDER BY (branches.updated_at)::text)) AS branches_signature,
     md5(string_agg(DISTINCT (commits.updated_at)::text, ',
@@ -2158,17 +2170,17 @@ CREATE RULE "_RETURN" AS
     md5(string_agg(DISTINCT (repositories.updated_at)::text, ',
              '::text ORDER BY (repositories.updated_at)::text)) AS repositories_signature,
     ( SELECT (((count(DISTINCT tasks.id))::text || ' - '::text) || (max(tasks.updated_at))::text)
-           FROM tasks
+           FROM public.tasks
           WHERE (tasks.job_id = jobs.id)) AS tasks_signature,
     ( SELECT count(DISTINCT tree_attachments.id) AS count
-           FROM tree_attachments
+           FROM public.tree_attachments
           WHERE (tree_attachments.tree_id = (jobs.tree_id)::text)) AS tree_attachments_count
-   FROM (((((jobs
-     LEFT JOIN job_issues ON ((jobs.id = job_issues.job_id)))
-     LEFT JOIN commits ON (((jobs.tree_id)::text = (commits.tree_id)::text)))
-     LEFT JOIN branches_commits ON (((branches_commits.commit_id)::text = (commits.id)::text)))
-     LEFT JOIN branches ON ((branches_commits.branch_id = branches.id)))
-     LEFT JOIN repositories ON ((branches.repository_id = repositories.id)))
+   FROM (((((public.jobs
+     LEFT JOIN public.job_issues ON ((jobs.id = job_issues.job_id)))
+     LEFT JOIN public.commits ON (((jobs.tree_id)::text = (commits.tree_id)::text)))
+     LEFT JOIN public.branches_commits ON (((branches_commits.commit_id)::text = (commits.id)::text)))
+     LEFT JOIN public.branches ON ((branches_commits.branch_id = branches.id)))
+     LEFT JOIN public.repositories ON ((branches.repository_id = repositories.id)))
   GROUP BY jobs.id;
 
 
@@ -2176,640 +2188,640 @@ CREATE RULE "_RETURN" AS
 -- Name: branch_update_events clean_branch_update_events; Type: TRIGGER; Schema: public; Owner: -
 --
 
-CREATE TRIGGER clean_branch_update_events AFTER INSERT ON branch_update_events FOR EACH STATEMENT EXECUTE PROCEDURE clean_branch_update_events();
+CREATE TRIGGER clean_branch_update_events AFTER INSERT ON public.branch_update_events FOR EACH STATEMENT EXECUTE PROCEDURE public.clean_branch_update_events();
 
 
 --
 -- Name: executor_events clean_executor_events; Type: TRIGGER; Schema: public; Owner: -
 --
 
-CREATE TRIGGER clean_executor_events AFTER INSERT ON executor_events FOR EACH STATEMENT EXECUTE PROCEDURE clean_executor_events();
+CREATE TRIGGER clean_executor_events AFTER INSERT ON public.executor_events FOR EACH STATEMENT EXECUTE PROCEDURE public.clean_executor_events();
 
 
 --
 -- Name: job_state_update_events clean_job_state_update_events; Type: TRIGGER; Schema: public; Owner: -
 --
 
-CREATE TRIGGER clean_job_state_update_events AFTER INSERT ON job_state_update_events FOR EACH STATEMENT EXECUTE PROCEDURE clean_job_state_update_events();
+CREATE TRIGGER clean_job_state_update_events AFTER INSERT ON public.job_state_update_events FOR EACH STATEMENT EXECUTE PROCEDURE public.clean_job_state_update_events();
 
 
 --
 -- Name: repository_events clean_repository_events; Type: TRIGGER; Schema: public; Owner: -
 --
 
-CREATE TRIGGER clean_repository_events AFTER INSERT ON repository_events FOR EACH STATEMENT EXECUTE PROCEDURE clean_repository_events();
+CREATE TRIGGER clean_repository_events AFTER INSERT ON public.repository_events FOR EACH STATEMENT EXECUTE PROCEDURE public.clean_repository_events();
 
 
 --
 -- Name: script_state_update_events clean_script_state_update_events; Type: TRIGGER; Schema: public; Owner: -
 --
 
-CREATE TRIGGER clean_script_state_update_events AFTER INSERT ON script_state_update_events FOR EACH STATEMENT EXECUTE PROCEDURE clean_script_state_update_events();
+CREATE TRIGGER clean_script_state_update_events AFTER INSERT ON public.script_state_update_events FOR EACH STATEMENT EXECUTE PROCEDURE public.clean_script_state_update_events();
 
 
 --
 -- Name: task_state_update_events clean_task_state_update_events; Type: TRIGGER; Schema: public; Owner: -
 --
 
-CREATE TRIGGER clean_task_state_update_events AFTER INSERT ON task_state_update_events FOR EACH STATEMENT EXECUTE PROCEDURE clean_task_state_update_events();
+CREATE TRIGGER clean_task_state_update_events AFTER INSERT ON public.task_state_update_events FOR EACH STATEMENT EXECUTE PROCEDURE public.clean_task_state_update_events();
 
 
 --
 -- Name: trial_state_update_events clean_trial_state_update_events; Type: TRIGGER; Schema: public; Owner: -
 --
 
-CREATE TRIGGER clean_trial_state_update_events AFTER INSERT ON trial_state_update_events FOR EACH STATEMENT EXECUTE PROCEDURE clean_trial_state_update_events();
+CREATE TRIGGER clean_trial_state_update_events AFTER INSERT ON public.trial_state_update_events FOR EACH STATEMENT EXECUTE PROCEDURE public.clean_trial_state_update_events();
 
 
 --
 -- Name: user_events clean_user_events; Type: TRIGGER; Schema: public; Owner: -
 --
 
-CREATE TRIGGER clean_user_events AFTER INSERT ON user_events FOR EACH STATEMENT EXECUTE PROCEDURE clean_user_events();
+CREATE TRIGGER clean_user_events AFTER INSERT ON public.user_events FOR EACH STATEMENT EXECUTE PROCEDURE public.clean_user_events();
 
 
 --
 -- Name: branches create_branch_update_event; Type: TRIGGER; Schema: public; Owner: -
 --
 
-CREATE TRIGGER create_branch_update_event AFTER INSERT OR UPDATE ON branches FOR EACH ROW EXECUTE PROCEDURE create_branch_update_event();
+CREATE TRIGGER create_branch_update_event AFTER INSERT OR UPDATE ON public.branches FOR EACH ROW EXECUTE PROCEDURE public.create_branch_update_event();
 
 
 --
 -- Name: jobs create_job_state_update_events_on_insert; Type: TRIGGER; Schema: public; Owner: -
 --
 
-CREATE TRIGGER create_job_state_update_events_on_insert AFTER INSERT ON jobs FOR EACH ROW EXECUTE PROCEDURE create_job_state_update_events();
+CREATE TRIGGER create_job_state_update_events_on_insert AFTER INSERT ON public.jobs FOR EACH ROW EXECUTE PROCEDURE public.create_job_state_update_events();
 
 
 --
 -- Name: jobs create_job_state_update_events_on_update; Type: TRIGGER; Schema: public; Owner: -
 --
 
-CREATE TRIGGER create_job_state_update_events_on_update AFTER UPDATE ON jobs FOR EACH ROW WHEN (((old.state)::text IS DISTINCT FROM (new.state)::text)) EXECUTE PROCEDURE create_job_state_update_events();
+CREATE TRIGGER create_job_state_update_events_on_update AFTER UPDATE ON public.jobs FOR EACH ROW WHEN (((old.state)::text IS DISTINCT FROM (new.state)::text)) EXECUTE PROCEDURE public.create_job_state_update_events();
 
 
 --
 -- Name: tasks create_pending_create_trials_evaluations_on_tasks_insert; Type: TRIGGER; Schema: public; Owner: -
 --
 
-CREATE TRIGGER create_pending_create_trials_evaluations_on_tasks_insert AFTER INSERT ON tasks FOR EACH ROW EXECUTE PROCEDURE create_pending_create_trials_evaluations_on_tasks_insert();
+CREATE TRIGGER create_pending_create_trials_evaluations_on_tasks_insert AFTER INSERT ON public.tasks FOR EACH ROW EXECUTE PROCEDURE public.create_pending_create_trials_evaluations_on_tasks_insert();
 
 
 --
 -- Name: trial_state_update_events create_pending_create_trials_evaluations_on_trial_state_change; Type: TRIGGER; Schema: public; Owner: -
 --
 
-CREATE TRIGGER create_pending_create_trials_evaluations_on_trial_state_change AFTER INSERT ON trial_state_update_events FOR EACH ROW WHEN (((new.state)::text = ANY ((ARRAY['aborted'::character varying, 'defective'::character varying, 'failed'::character varying, 'passed'::character varying, 'skipped'::character varying])::text[]))) EXECUTE PROCEDURE create_pending_create_trials_evaluations_on_trial_state_change();
+CREATE TRIGGER create_pending_create_trials_evaluations_on_trial_state_change AFTER INSERT ON public.trial_state_update_events FOR EACH ROW WHEN (((new.state)::text = ANY ((ARRAY['aborted'::character varying, 'defective'::character varying, 'failed'::character varying, 'passed'::character varying, 'skipped'::character varying])::text[]))) EXECUTE PROCEDURE public.create_pending_create_trials_evaluations_on_trial_state_change();
 
 
 --
 -- Name: task_state_update_events create_pending_job_evaluation_on_task_state_update_event_insert; Type: TRIGGER; Schema: public; Owner: -
 --
 
-CREATE TRIGGER create_pending_job_evaluation_on_task_state_update_event_insert AFTER INSERT ON task_state_update_events FOR EACH ROW EXECUTE PROCEDURE create_pending_job_evaluation_on_task_state_update_event_insert();
+CREATE TRIGGER create_pending_job_evaluation_on_task_state_update_event_insert AFTER INSERT ON public.task_state_update_events FOR EACH ROW EXECUTE PROCEDURE public.create_pending_job_evaluation_on_task_state_update_event_insert();
 
 
 --
 -- Name: trials create_pending_result_propagation; Type: TRIGGER; Schema: public; Owner: -
 --
 
-CREATE TRIGGER create_pending_result_propagation AFTER UPDATE ON trials FOR EACH ROW WHEN ((old.result IS DISTINCT FROM new.result)) EXECUTE PROCEDURE create_pending_result_propagation();
+CREATE TRIGGER create_pending_result_propagation AFTER UPDATE ON public.trials FOR EACH ROW WHEN ((old.result IS DISTINCT FROM new.result)) EXECUTE PROCEDURE public.create_pending_result_propagation();
 
 
 --
 -- Name: trial_state_update_events create_pending_task_evaluation_on_trial_state_update_event_inse; Type: TRIGGER; Schema: public; Owner: -
 --
 
-CREATE TRIGGER create_pending_task_evaluation_on_trial_state_update_event_inse AFTER INSERT ON trial_state_update_events FOR EACH ROW EXECUTE PROCEDURE create_pending_task_evaluation_on_trial_state_update_event_inse();
+CREATE TRIGGER create_pending_task_evaluation_on_trial_state_update_event_inse AFTER INSERT ON public.trial_state_update_events FOR EACH ROW EXECUTE PROCEDURE public.create_pending_task_evaluation_on_trial_state_update_event_inse();
 
 
 --
 -- Name: scripts create_script_state_update_events_on_insert; Type: TRIGGER; Schema: public; Owner: -
 --
 
-CREATE TRIGGER create_script_state_update_events_on_insert AFTER INSERT ON scripts FOR EACH ROW EXECUTE PROCEDURE create_script_state_update_events();
+CREATE TRIGGER create_script_state_update_events_on_insert AFTER INSERT ON public.scripts FOR EACH ROW EXECUTE PROCEDURE public.create_script_state_update_events();
 
 
 --
 -- Name: scripts create_script_state_update_events_on_update; Type: TRIGGER; Schema: public; Owner: -
 --
 
-CREATE TRIGGER create_script_state_update_events_on_update AFTER UPDATE ON scripts FOR EACH ROW WHEN (((old.state)::text IS DISTINCT FROM (new.state)::text)) EXECUTE PROCEDURE create_script_state_update_events();
+CREATE TRIGGER create_script_state_update_events_on_update AFTER UPDATE ON public.scripts FOR EACH ROW WHEN (((old.state)::text IS DISTINCT FROM (new.state)::text)) EXECUTE PROCEDURE public.create_script_state_update_events();
 
 
 --
 -- Name: tasks create_task_state_update_events_on_insert; Type: TRIGGER; Schema: public; Owner: -
 --
 
-CREATE TRIGGER create_task_state_update_events_on_insert AFTER INSERT ON tasks FOR EACH ROW EXECUTE PROCEDURE create_task_state_update_events();
+CREATE TRIGGER create_task_state_update_events_on_insert AFTER INSERT ON public.tasks FOR EACH ROW EXECUTE PROCEDURE public.create_task_state_update_events();
 
 
 --
 -- Name: tasks create_task_state_update_events_on_update; Type: TRIGGER; Schema: public; Owner: -
 --
 
-CREATE TRIGGER create_task_state_update_events_on_update AFTER UPDATE ON tasks FOR EACH ROW WHEN (((old.state)::text IS DISTINCT FROM (new.state)::text)) EXECUTE PROCEDURE create_task_state_update_events();
+CREATE TRIGGER create_task_state_update_events_on_update AFTER UPDATE ON public.tasks FOR EACH ROW WHEN (((old.state)::text IS DISTINCT FROM (new.state)::text)) EXECUTE PROCEDURE public.create_task_state_update_events();
 
 
 --
 -- Name: branches create_tree_id_notification_on_branch_change; Type: TRIGGER; Schema: public; Owner: -
 --
 
-CREATE TRIGGER create_tree_id_notification_on_branch_change AFTER INSERT OR UPDATE ON branches FOR EACH ROW EXECUTE PROCEDURE create_tree_id_notification_on_branch_change();
+CREATE TRIGGER create_tree_id_notification_on_branch_change AFTER INSERT OR UPDATE ON public.branches FOR EACH ROW EXECUTE PROCEDURE public.create_tree_id_notification_on_branch_change();
 
 
 --
 -- Name: jobs create_tree_id_notification_on_job_state_change; Type: TRIGGER; Schema: public; Owner: -
 --
 
-CREATE TRIGGER create_tree_id_notification_on_job_state_change AFTER UPDATE ON jobs FOR EACH ROW WHEN (((old.state)::text IS DISTINCT FROM (new.state)::text)) EXECUTE PROCEDURE create_tree_id_notification_on_job_state_change();
+CREATE TRIGGER create_tree_id_notification_on_job_state_change AFTER UPDATE ON public.jobs FOR EACH ROW WHEN (((old.state)::text IS DISTINCT FROM (new.state)::text)) EXECUTE PROCEDURE public.create_tree_id_notification_on_job_state_change();
 
 
 --
 -- Name: trials create_trial_state_update_events_on_insert; Type: TRIGGER; Schema: public; Owner: -
 --
 
-CREATE TRIGGER create_trial_state_update_events_on_insert AFTER INSERT ON trials FOR EACH ROW EXECUTE PROCEDURE create_trial_state_update_events();
+CREATE TRIGGER create_trial_state_update_events_on_insert AFTER INSERT ON public.trials FOR EACH ROW EXECUTE PROCEDURE public.create_trial_state_update_events();
 
 
 --
 -- Name: trials create_trial_state_update_events_on_update; Type: TRIGGER; Schema: public; Owner: -
 --
 
-CREATE TRIGGER create_trial_state_update_events_on_update AFTER UPDATE ON trials FOR EACH ROW WHEN (((old.state)::text IS DISTINCT FROM (new.state)::text)) EXECUTE PROCEDURE create_trial_state_update_events();
+CREATE TRIGGER create_trial_state_update_events_on_update AFTER UPDATE ON public.trials FOR EACH ROW WHEN (((old.state)::text IS DISTINCT FROM (new.state)::text)) EXECUTE PROCEDURE public.create_trial_state_update_events();
 
 
 --
 -- Name: executors executor_event; Type: TRIGGER; Schema: public; Owner: -
 --
 
-CREATE TRIGGER executor_event AFTER INSERT OR DELETE OR UPDATE ON executors FOR EACH ROW EXECUTE PROCEDURE executor_event();
+CREATE TRIGGER executor_event AFTER INSERT OR DELETE OR UPDATE ON public.executors FOR EACH ROW EXECUTE PROCEDURE public.executor_event();
 
 
 --
 -- Name: executors executor_event_truncate; Type: TRIGGER; Schema: public; Owner: -
 --
 
-CREATE TRIGGER executor_event_truncate AFTER TRUNCATE ON executors FOR EACH STATEMENT EXECUTE PROCEDURE executor_event();
+CREATE TRIGGER executor_event_truncate AFTER TRUNCATE ON public.executors FOR EACH STATEMENT EXECUTE PROCEDURE public.executor_event();
 
 
 --
 -- Name: repositories repository_event; Type: TRIGGER; Schema: public; Owner: -
 --
 
-CREATE TRIGGER repository_event AFTER INSERT OR DELETE OR UPDATE ON repositories FOR EACH ROW EXECUTE PROCEDURE repository_event();
+CREATE TRIGGER repository_event AFTER INSERT OR DELETE OR UPDATE ON public.repositories FOR EACH ROW EXECUTE PROCEDURE public.repository_event();
 
 
 --
 -- Name: repositories repository_event_truncate; Type: TRIGGER; Schema: public; Owner: -
 --
 
-CREATE TRIGGER repository_event_truncate AFTER TRUNCATE ON repositories FOR EACH STATEMENT EXECUTE PROCEDURE repository_event();
+CREATE TRIGGER repository_event_truncate AFTER TRUNCATE ON public.repositories FOR EACH STATEMENT EXECUTE PROCEDURE public.repository_event();
 
 
 --
 -- Name: api_tokens update_updated_at_column_of_api_tokens; Type: TRIGGER; Schema: public; Owner: -
 --
 
-CREATE TRIGGER update_updated_at_column_of_api_tokens BEFORE UPDATE ON api_tokens FOR EACH ROW WHEN ((old.* IS DISTINCT FROM new.*)) EXECUTE PROCEDURE update_updated_at_column();
+CREATE TRIGGER update_updated_at_column_of_api_tokens BEFORE UPDATE ON public.api_tokens FOR EACH ROW WHEN ((old.* IS DISTINCT FROM new.*)) EXECUTE PROCEDURE public.update_updated_at_column();
 
 
 --
 -- Name: branches update_updated_at_column_of_branches; Type: TRIGGER; Schema: public; Owner: -
 --
 
-CREATE TRIGGER update_updated_at_column_of_branches BEFORE UPDATE ON branches FOR EACH ROW WHEN ((old.* IS DISTINCT FROM new.*)) EXECUTE PROCEDURE update_updated_at_column();
+CREATE TRIGGER update_updated_at_column_of_branches BEFORE UPDATE ON public.branches FOR EACH ROW WHEN ((old.* IS DISTINCT FROM new.*)) EXECUTE PROCEDURE public.update_updated_at_column();
 
 
 --
 -- Name: commits update_updated_at_column_of_commits; Type: TRIGGER; Schema: public; Owner: -
 --
 
-CREATE TRIGGER update_updated_at_column_of_commits BEFORE UPDATE ON commits FOR EACH ROW WHEN ((old.* IS DISTINCT FROM new.*)) EXECUTE PROCEDURE update_updated_at_column();
+CREATE TRIGGER update_updated_at_column_of_commits BEFORE UPDATE ON public.commits FOR EACH ROW WHEN ((old.* IS DISTINCT FROM new.*)) EXECUTE PROCEDURE public.update_updated_at_column();
 
 
 --
 -- Name: executor_issues update_updated_at_column_of_executor_issues; Type: TRIGGER; Schema: public; Owner: -
 --
 
-CREATE TRIGGER update_updated_at_column_of_executor_issues BEFORE UPDATE ON executor_issues FOR EACH ROW WHEN ((old.* IS DISTINCT FROM new.*)) EXECUTE PROCEDURE update_updated_at_column();
+CREATE TRIGGER update_updated_at_column_of_executor_issues BEFORE UPDATE ON public.executor_issues FOR EACH ROW WHEN ((old.* IS DISTINCT FROM new.*)) EXECUTE PROCEDURE public.update_updated_at_column();
 
 
 --
 -- Name: executors update_updated_at_column_of_executors; Type: TRIGGER; Schema: public; Owner: -
 --
 
-CREATE TRIGGER update_updated_at_column_of_executors BEFORE UPDATE ON executors FOR EACH ROW WHEN ((old.* IS DISTINCT FROM new.*)) EXECUTE PROCEDURE update_updated_at_column();
+CREATE TRIGGER update_updated_at_column_of_executors BEFORE UPDATE ON public.executors FOR EACH ROW WHEN ((old.* IS DISTINCT FROM new.*)) EXECUTE PROCEDURE public.update_updated_at_column();
 
 
 --
 -- Name: job_issues update_updated_at_column_of_job_issues; Type: TRIGGER; Schema: public; Owner: -
 --
 
-CREATE TRIGGER update_updated_at_column_of_job_issues BEFORE UPDATE ON job_issues FOR EACH ROW WHEN ((old.* IS DISTINCT FROM new.*)) EXECUTE PROCEDURE update_updated_at_column();
+CREATE TRIGGER update_updated_at_column_of_job_issues BEFORE UPDATE ON public.job_issues FOR EACH ROW WHEN ((old.* IS DISTINCT FROM new.*)) EXECUTE PROCEDURE public.update_updated_at_column();
 
 
 --
 -- Name: jobs update_updated_at_column_of_jobs; Type: TRIGGER; Schema: public; Owner: -
 --
 
-CREATE TRIGGER update_updated_at_column_of_jobs BEFORE UPDATE ON jobs FOR EACH ROW WHEN ((old.* IS DISTINCT FROM new.*)) EXECUTE PROCEDURE update_updated_at_column();
+CREATE TRIGGER update_updated_at_column_of_jobs BEFORE UPDATE ON public.jobs FOR EACH ROW WHEN ((old.* IS DISTINCT FROM new.*)) EXECUTE PROCEDURE public.update_updated_at_column();
 
 
 --
 -- Name: repositories update_updated_at_column_of_repositories; Type: TRIGGER; Schema: public; Owner: -
 --
 
-CREATE TRIGGER update_updated_at_column_of_repositories BEFORE UPDATE ON repositories FOR EACH ROW WHEN ((old.* IS DISTINCT FROM new.*)) EXECUTE PROCEDURE update_updated_at_column();
+CREATE TRIGGER update_updated_at_column_of_repositories BEFORE UPDATE ON public.repositories FOR EACH ROW WHEN ((old.* IS DISTINCT FROM new.*)) EXECUTE PROCEDURE public.update_updated_at_column();
 
 
 --
 -- Name: scripts update_updated_at_column_of_scripts; Type: TRIGGER; Schema: public; Owner: -
 --
 
-CREATE TRIGGER update_updated_at_column_of_scripts BEFORE UPDATE ON scripts FOR EACH ROW WHEN ((old.* IS DISTINCT FROM new.*)) EXECUTE PROCEDURE update_updated_at_column();
+CREATE TRIGGER update_updated_at_column_of_scripts BEFORE UPDATE ON public.scripts FOR EACH ROW WHEN ((old.* IS DISTINCT FROM new.*)) EXECUTE PROCEDURE public.update_updated_at_column();
 
 
 --
 -- Name: tasks update_updated_at_column_of_tasks; Type: TRIGGER; Schema: public; Owner: -
 --
 
-CREATE TRIGGER update_updated_at_column_of_tasks BEFORE UPDATE ON tasks FOR EACH ROW WHEN ((old.* IS DISTINCT FROM new.*)) EXECUTE PROCEDURE update_updated_at_column();
+CREATE TRIGGER update_updated_at_column_of_tasks BEFORE UPDATE ON public.tasks FOR EACH ROW WHEN ((old.* IS DISTINCT FROM new.*)) EXECUTE PROCEDURE public.update_updated_at_column();
 
 
 --
 -- Name: tree_attachments update_updated_at_column_of_tree_attachments; Type: TRIGGER; Schema: public; Owner: -
 --
 
-CREATE TRIGGER update_updated_at_column_of_tree_attachments BEFORE UPDATE ON tree_attachments FOR EACH ROW WHEN ((old.* IS DISTINCT FROM new.*)) EXECUTE PROCEDURE update_updated_at_column();
+CREATE TRIGGER update_updated_at_column_of_tree_attachments BEFORE UPDATE ON public.tree_attachments FOR EACH ROW WHEN ((old.* IS DISTINCT FROM new.*)) EXECUTE PROCEDURE public.update_updated_at_column();
 
 
 --
 -- Name: tree_id_notifications update_updated_at_column_of_tree_id_notifications; Type: TRIGGER; Schema: public; Owner: -
 --
 
-CREATE TRIGGER update_updated_at_column_of_tree_id_notifications BEFORE UPDATE ON tree_id_notifications FOR EACH ROW WHEN ((old.* IS DISTINCT FROM new.*)) EXECUTE PROCEDURE update_updated_at_column();
+CREATE TRIGGER update_updated_at_column_of_tree_id_notifications BEFORE UPDATE ON public.tree_id_notifications FOR EACH ROW WHEN ((old.* IS DISTINCT FROM new.*)) EXECUTE PROCEDURE public.update_updated_at_column();
 
 
 --
 -- Name: tree_issues update_updated_at_column_of_tree_issues; Type: TRIGGER; Schema: public; Owner: -
 --
 
-CREATE TRIGGER update_updated_at_column_of_tree_issues BEFORE UPDATE ON tree_issues FOR EACH ROW WHEN ((old.* IS DISTINCT FROM new.*)) EXECUTE PROCEDURE update_updated_at_column();
+CREATE TRIGGER update_updated_at_column_of_tree_issues BEFORE UPDATE ON public.tree_issues FOR EACH ROW WHEN ((old.* IS DISTINCT FROM new.*)) EXECUTE PROCEDURE public.update_updated_at_column();
 
 
 --
 -- Name: trial_attachments update_updated_at_column_of_trial_attachments; Type: TRIGGER; Schema: public; Owner: -
 --
 
-CREATE TRIGGER update_updated_at_column_of_trial_attachments BEFORE UPDATE ON trial_attachments FOR EACH ROW WHEN ((old.* IS DISTINCT FROM new.*)) EXECUTE PROCEDURE update_updated_at_column();
+CREATE TRIGGER update_updated_at_column_of_trial_attachments BEFORE UPDATE ON public.trial_attachments FOR EACH ROW WHEN ((old.* IS DISTINCT FROM new.*)) EXECUTE PROCEDURE public.update_updated_at_column();
 
 
 --
 -- Name: trial_issues update_updated_at_column_of_trial_issues; Type: TRIGGER; Schema: public; Owner: -
 --
 
-CREATE TRIGGER update_updated_at_column_of_trial_issues BEFORE UPDATE ON trial_issues FOR EACH ROW WHEN ((old.* IS DISTINCT FROM new.*)) EXECUTE PROCEDURE update_updated_at_column();
+CREATE TRIGGER update_updated_at_column_of_trial_issues BEFORE UPDATE ON public.trial_issues FOR EACH ROW WHEN ((old.* IS DISTINCT FROM new.*)) EXECUTE PROCEDURE public.update_updated_at_column();
 
 
 --
 -- Name: trials update_updated_at_column_of_trials; Type: TRIGGER; Schema: public; Owner: -
 --
 
-CREATE TRIGGER update_updated_at_column_of_trials BEFORE UPDATE ON trials FOR EACH ROW WHEN ((old.* IS DISTINCT FROM new.*)) EXECUTE PROCEDURE update_updated_at_column();
+CREATE TRIGGER update_updated_at_column_of_trials BEFORE UPDATE ON public.trials FOR EACH ROW WHEN ((old.* IS DISTINCT FROM new.*)) EXECUTE PROCEDURE public.update_updated_at_column();
 
 
 --
 -- Name: users update_updated_at_column_of_users; Type: TRIGGER; Schema: public; Owner: -
 --
 
-CREATE TRIGGER update_updated_at_column_of_users BEFORE UPDATE ON users FOR EACH ROW WHEN ((old.* IS DISTINCT FROM new.*)) EXECUTE PROCEDURE update_updated_at_column();
+CREATE TRIGGER update_updated_at_column_of_users BEFORE UPDATE ON public.users FOR EACH ROW WHEN ((old.* IS DISTINCT FROM new.*)) EXECUTE PROCEDURE public.update_updated_at_column();
 
 
 --
 -- Name: welcome_page_settings update_updated_at_column_of_welcome_page_settings; Type: TRIGGER; Schema: public; Owner: -
 --
 
-CREATE TRIGGER update_updated_at_column_of_welcome_page_settings BEFORE UPDATE ON welcome_page_settings FOR EACH ROW WHEN ((old.* IS DISTINCT FROM new.*)) EXECUTE PROCEDURE update_updated_at_column();
+CREATE TRIGGER update_updated_at_column_of_welcome_page_settings BEFORE UPDATE ON public.welcome_page_settings FOR EACH ROW WHEN ((old.* IS DISTINCT FROM new.*)) EXECUTE PROCEDURE public.update_updated_at_column();
 
 
 --
 -- Name: users user_event; Type: TRIGGER; Schema: public; Owner: -
 --
 
-CREATE TRIGGER user_event AFTER INSERT OR DELETE OR UPDATE ON users FOR EACH ROW EXECUTE PROCEDURE user_event();
+CREATE TRIGGER user_event AFTER INSERT OR DELETE OR UPDATE ON public.users FOR EACH ROW EXECUTE PROCEDURE public.user_event();
 
 
 --
 -- Name: users user_event_truncate; Type: TRIGGER; Schema: public; Owner: -
 --
 
-CREATE TRIGGER user_event_truncate AFTER TRUNCATE ON users FOR EACH STATEMENT EXECUTE PROCEDURE user_event();
+CREATE TRIGGER user_event_truncate AFTER TRUNCATE ON public.users FOR EACH STATEMENT EXECUTE PROCEDURE public.user_event();
 
 
 --
 -- Name: pending_job_evaluations fk_rails_0bf999a237; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY pending_job_evaluations
-    ADD CONSTRAINT fk_rails_0bf999a237 FOREIGN KEY (task_state_update_event_id) REFERENCES task_state_update_events(id) ON DELETE CASCADE;
+ALTER TABLE ONLY public.pending_job_evaluations
+    ADD CONSTRAINT fk_rails_0bf999a237 FOREIGN KEY (task_state_update_event_id) REFERENCES public.task_state_update_events(id) ON DELETE CASCADE;
 
 
 --
 -- Name: branch_update_events fk_rails_1aba877542; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY branch_update_events
-    ADD CONSTRAINT fk_rails_1aba877542 FOREIGN KEY (branch_id) REFERENCES branches(id) ON DELETE CASCADE;
+ALTER TABLE ONLY public.branch_update_events
+    ADD CONSTRAINT fk_rails_1aba877542 FOREIGN KEY (branch_id) REFERENCES public.branches(id) ON DELETE CASCADE;
 
 
 --
 -- Name: pending_task_evaluations fk_rails_2043ecf4ac; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY pending_task_evaluations
-    ADD CONSTRAINT fk_rails_2043ecf4ac FOREIGN KEY (task_id) REFERENCES tasks(id) ON DELETE CASCADE;
+ALTER TABLE ONLY public.pending_task_evaluations
+    ADD CONSTRAINT fk_rails_2043ecf4ac FOREIGN KEY (task_id) REFERENCES public.tasks(id) ON DELETE CASCADE;
 
 
 --
 -- Name: pending_task_evaluations fk_rails_2285e098a6; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY pending_task_evaluations
-    ADD CONSTRAINT fk_rails_2285e098a6 FOREIGN KEY (trial_state_update_event_id) REFERENCES trial_state_update_events(id) ON DELETE CASCADE;
+ALTER TABLE ONLY public.pending_task_evaluations
+    ADD CONSTRAINT fk_rails_2285e098a6 FOREIGN KEY (trial_state_update_event_id) REFERENCES public.trial_state_update_events(id) ON DELETE CASCADE;
 
 
 --
 -- Name: task_state_update_events fk_rails_2420fea61c; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY task_state_update_events
-    ADD CONSTRAINT fk_rails_2420fea61c FOREIGN KEY (task_id) REFERENCES tasks(id) ON DELETE CASCADE;
+ALTER TABLE ONLY public.task_state_update_events
+    ADD CONSTRAINT fk_rails_2420fea61c FOREIGN KEY (task_id) REFERENCES public.tasks(id) ON DELETE CASCADE;
 
 
 --
 -- Name: trial_attachments fk_rails_2595d4f43b; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY trial_attachments
-    ADD CONSTRAINT fk_rails_2595d4f43b FOREIGN KEY (trial_id) REFERENCES trials(id) ON DELETE CASCADE;
+ALTER TABLE ONLY public.trial_attachments
+    ADD CONSTRAINT fk_rails_2595d4f43b FOREIGN KEY (trial_id) REFERENCES public.trials(id) ON DELETE CASCADE;
 
 
 --
 -- Name: trials fk_rails_3bfb7b73f7; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY trials
-    ADD CONSTRAINT fk_rails_3bfb7b73f7 FOREIGN KEY (aborted_by) REFERENCES users(id);
+ALTER TABLE ONLY public.trials
+    ADD CONSTRAINT fk_rails_3bfb7b73f7 FOREIGN KEY (aborted_by) REFERENCES public.users(id);
 
 
 --
 -- Name: jobs fk_rails_3ccf965e25; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY jobs
-    ADD CONSTRAINT fk_rails_3ccf965e25 FOREIGN KEY (created_by) REFERENCES users(id);
+ALTER TABLE ONLY public.jobs
+    ADD CONSTRAINT fk_rails_3ccf965e25 FOREIGN KEY (created_by) REFERENCES public.users(id);
 
 
 --
 -- Name: trials fk_rails_3e557ab362; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY trials
-    ADD CONSTRAINT fk_rails_3e557ab362 FOREIGN KEY (created_by) REFERENCES users(id);
+ALTER TABLE ONLY public.trials
+    ADD CONSTRAINT fk_rails_3e557ab362 FOREIGN KEY (created_by) REFERENCES public.users(id);
 
 
 --
 -- Name: jobs fk_rails_5056f0a1f0; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY jobs
-    ADD CONSTRAINT fk_rails_5056f0a1f0 FOREIGN KEY (aborted_by) REFERENCES users(id);
+ALTER TABLE ONLY public.jobs
+    ADD CONSTRAINT fk_rails_5056f0a1f0 FOREIGN KEY (aborted_by) REFERENCES public.users(id);
 
 
 --
 -- Name: repository_user_permissions fk_rails_50624d2f4e; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY repository_user_permissions
-    ADD CONSTRAINT fk_rails_50624d2f4e FOREIGN KEY (repository_id) REFERENCES repositories(id) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE ONLY public.repository_user_permissions
+    ADD CONSTRAINT fk_rails_50624d2f4e FOREIGN KEY (repository_id) REFERENCES public.repositories(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
 -- Name: script_state_update_events fk_rails_5ff6d4badd; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY script_state_update_events
-    ADD CONSTRAINT fk_rails_5ff6d4badd FOREIGN KEY (script_id) REFERENCES scripts(id) ON DELETE CASCADE;
+ALTER TABLE ONLY public.script_state_update_events
+    ADD CONSTRAINT fk_rails_5ff6d4badd FOREIGN KEY (script_id) REFERENCES public.scripts(id) ON DELETE CASCADE;
 
 
 --
 -- Name: pending_job_evaluations fk_rails_613c47280f; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY pending_job_evaluations
-    ADD CONSTRAINT fk_rails_613c47280f FOREIGN KEY (job_id) REFERENCES jobs(id) ON DELETE CASCADE;
+ALTER TABLE ONLY public.pending_job_evaluations
+    ADD CONSTRAINT fk_rails_613c47280f FOREIGN KEY (job_id) REFERENCES public.jobs(id) ON DELETE CASCADE;
 
 
 --
 -- Name: commit_arcs fk_rails_637f302c5b; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY commit_arcs
-    ADD CONSTRAINT fk_rails_637f302c5b FOREIGN KEY (parent_id) REFERENCES commits(id) ON DELETE CASCADE;
+ALTER TABLE ONLY public.commit_arcs
+    ADD CONSTRAINT fk_rails_637f302c5b FOREIGN KEY (parent_id) REFERENCES public.commits(id) ON DELETE CASCADE;
 
 
 --
 -- Name: submodules fk_rails_73565c5700; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY submodules
-    ADD CONSTRAINT fk_rails_73565c5700 FOREIGN KEY (commit_id) REFERENCES commits(id) ON DELETE CASCADE;
+ALTER TABLE ONLY public.submodules
+    ADD CONSTRAINT fk_rails_73565c5700 FOREIGN KEY (commit_id) REFERENCES public.commits(id) ON DELETE CASCADE;
 
 
 --
 -- Name: branches fk_rails_741467517e; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY branches
-    ADD CONSTRAINT fk_rails_741467517e FOREIGN KEY (current_commit_id) REFERENCES commits(id) ON DELETE CASCADE;
+ALTER TABLE ONLY public.branches
+    ADD CONSTRAINT fk_rails_741467517e FOREIGN KEY (current_commit_id) REFERENCES public.commits(id) ON DELETE CASCADE;
 
 
 --
 -- Name: pending_result_propagations fk_rails_870c3ec6fd; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY pending_result_propagations
-    ADD CONSTRAINT fk_rails_870c3ec6fd FOREIGN KEY (trial_id) REFERENCES trials(id) ON DELETE CASCADE;
+ALTER TABLE ONLY public.pending_result_propagations
+    ADD CONSTRAINT fk_rails_870c3ec6fd FOREIGN KEY (trial_id) REFERENCES public.trials(id) ON DELETE CASCADE;
 
 
 --
 -- Name: executor_issues fk_rails_880255918f; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY executor_issues
-    ADD CONSTRAINT fk_rails_880255918f FOREIGN KEY (executor_id) REFERENCES executors(id) ON DELETE CASCADE;
+ALTER TABLE ONLY public.executor_issues
+    ADD CONSTRAINT fk_rails_880255918f FOREIGN KEY (executor_id) REFERENCES public.executors(id) ON DELETE CASCADE;
 
 
 --
 -- Name: pending_create_trials_evaluations fk_rails_99e0f3714e; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY pending_create_trials_evaluations
-    ADD CONSTRAINT fk_rails_99e0f3714e FOREIGN KEY (trial_state_update_event_id) REFERENCES trial_state_update_events(id) ON DELETE CASCADE;
+ALTER TABLE ONLY public.pending_create_trials_evaluations
+    ADD CONSTRAINT fk_rails_99e0f3714e FOREIGN KEY (trial_state_update_event_id) REFERENCES public.trial_state_update_events(id) ON DELETE CASCADE;
 
 
 --
 -- Name: job_state_update_events fk_rails_b33ab63674; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY job_state_update_events
-    ADD CONSTRAINT fk_rails_b33ab63674 FOREIGN KEY (job_id) REFERENCES jobs(id) ON DELETE CASCADE;
+ALTER TABLE ONLY public.job_state_update_events
+    ADD CONSTRAINT fk_rails_b33ab63674 FOREIGN KEY (job_id) REFERENCES public.jobs(id) ON DELETE CASCADE;
 
 
 --
 -- Name: repository_executor_permissions fk_rails_bdef0ebb7b; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY repository_executor_permissions
-    ADD CONSTRAINT fk_rails_bdef0ebb7b FOREIGN KEY (repository_id) REFERENCES repositories(id) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE ONLY public.repository_executor_permissions
+    ADD CONSTRAINT fk_rails_bdef0ebb7b FOREIGN KEY (repository_id) REFERENCES public.repositories(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
 -- Name: branches_commits fk_rails_ce2b80387a; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY branches_commits
-    ADD CONSTRAINT fk_rails_ce2b80387a FOREIGN KEY (commit_id) REFERENCES commits(id) ON DELETE CASCADE;
+ALTER TABLE ONLY public.branches_commits
+    ADD CONSTRAINT fk_rails_ce2b80387a FOREIGN KEY (commit_id) REFERENCES public.commits(id) ON DELETE CASCADE;
 
 
 --
 -- Name: branches fk_rails_ce3c7008c0; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY branches
-    ADD CONSTRAINT fk_rails_ce3c7008c0 FOREIGN KEY (repository_id) REFERENCES repositories(id) ON DELETE CASCADE;
+ALTER TABLE ONLY public.branches
+    ADD CONSTRAINT fk_rails_ce3c7008c0 FOREIGN KEY (repository_id) REFERENCES public.repositories(id) ON DELETE CASCADE;
 
 
 --
 -- Name: jobs fk_rails_cf50105b6a; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY jobs
-    ADD CONSTRAINT fk_rails_cf50105b6a FOREIGN KEY (resumed_by) REFERENCES users(id);
+ALTER TABLE ONLY public.jobs
+    ADD CONSTRAINT fk_rails_cf50105b6a FOREIGN KEY (resumed_by) REFERENCES public.users(id);
 
 
 --
 -- Name: repository_user_permissions fk_rails_d503147ced; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY repository_user_permissions
-    ADD CONSTRAINT fk_rails_d503147ced FOREIGN KEY (user_id) REFERENCES users(id) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE ONLY public.repository_user_permissions
+    ADD CONSTRAINT fk_rails_d503147ced FOREIGN KEY (user_id) REFERENCES public.users(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
 -- Name: trial_state_update_events fk_rails_dbbb93c299; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY trial_state_update_events
-    ADD CONSTRAINT fk_rails_dbbb93c299 FOREIGN KEY (trial_id) REFERENCES trials(id) ON DELETE CASCADE;
+ALTER TABLE ONLY public.trial_state_update_events
+    ADD CONSTRAINT fk_rails_dbbb93c299 FOREIGN KEY (trial_id) REFERENCES public.trials(id) ON DELETE CASCADE;
 
 
 --
 -- Name: email_addresses fk_rails_de643267e7; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY email_addresses
-    ADD CONSTRAINT fk_rails_de643267e7 FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE;
+ALTER TABLE ONLY public.email_addresses
+    ADD CONSTRAINT fk_rails_de643267e7 FOREIGN KEY (user_id) REFERENCES public.users(id) ON DELETE CASCADE;
 
 
 --
 -- Name: repository_executor_permissions fk_rails_e57d2c8dc2; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY repository_executor_permissions
-    ADD CONSTRAINT fk_rails_e57d2c8dc2 FOREIGN KEY (executor_id) REFERENCES executors(id) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE ONLY public.repository_executor_permissions
+    ADD CONSTRAINT fk_rails_e57d2c8dc2 FOREIGN KEY (executor_id) REFERENCES public.executors(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
 -- Name: scripts fk_rails_eb81826b6c; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY scripts
-    ADD CONSTRAINT fk_rails_eb81826b6c FOREIGN KEY (trial_id) REFERENCES trials(id) ON DELETE CASCADE;
+ALTER TABLE ONLY public.scripts
+    ADD CONSTRAINT fk_rails_eb81826b6c FOREIGN KEY (trial_id) REFERENCES public.trials(id) ON DELETE CASCADE;
 
 
 --
 -- Name: pending_create_trials_evaluations fk_rails_f0d4638ea2; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY pending_create_trials_evaluations
-    ADD CONSTRAINT fk_rails_f0d4638ea2 FOREIGN KEY (task_id) REFERENCES tasks(id) ON DELETE CASCADE;
+ALTER TABLE ONLY public.pending_create_trials_evaluations
+    ADD CONSTRAINT fk_rails_f0d4638ea2 FOREIGN KEY (task_id) REFERENCES public.tasks(id) ON DELETE CASCADE;
 
 
 --
 -- Name: api_tokens fk_rails_f16b5e0447; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY api_tokens
-    ADD CONSTRAINT fk_rails_f16b5e0447 FOREIGN KEY (user_id) REFERENCES users(id) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE ONLY public.api_tokens
+    ADD CONSTRAINT fk_rails_f16b5e0447 FOREIGN KEY (user_id) REFERENCES public.users(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
 -- Name: branches_commits fk_rails_f1b0bc6b0c; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY branches_commits
-    ADD CONSTRAINT fk_rails_f1b0bc6b0c FOREIGN KEY (branch_id) REFERENCES branches(id) ON DELETE CASCADE;
+ALTER TABLE ONLY public.branches_commits
+    ADD CONSTRAINT fk_rails_f1b0bc6b0c FOREIGN KEY (branch_id) REFERENCES public.branches(id) ON DELETE CASCADE;
 
 
 --
 -- Name: commit_arcs fk_rails_fe00cc3459; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY commit_arcs
-    ADD CONSTRAINT fk_rails_fe00cc3459 FOREIGN KEY (child_id) REFERENCES commits(id) ON DELETE CASCADE;
+ALTER TABLE ONLY public.commit_arcs
+    ADD CONSTRAINT fk_rails_fe00cc3459 FOREIGN KEY (child_id) REFERENCES public.commits(id) ON DELETE CASCADE;
 
 
 --
 -- Name: job_issues job_issues_jobs_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY job_issues
-    ADD CONSTRAINT job_issues_jobs_fkey FOREIGN KEY (job_id) REFERENCES jobs(id) ON DELETE CASCADE;
+ALTER TABLE ONLY public.job_issues
+    ADD CONSTRAINT job_issues_jobs_fkey FOREIGN KEY (job_id) REFERENCES public.jobs(id) ON DELETE CASCADE;
 
 
 --
 -- Name: jobs jobs_job-specifications_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY jobs
-    ADD CONSTRAINT "jobs_job-specifications_fkey" FOREIGN KEY (job_specification_id) REFERENCES job_specifications(id);
+ALTER TABLE ONLY public.jobs
+    ADD CONSTRAINT "jobs_job-specifications_fkey" FOREIGN KEY (job_specification_id) REFERENCES public.job_specifications(id);
 
 
 --
 -- Name: tasks tasks_jobs_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY tasks
-    ADD CONSTRAINT tasks_jobs_fkey FOREIGN KEY (job_id) REFERENCES jobs(id) ON DELETE CASCADE;
+ALTER TABLE ONLY public.tasks
+    ADD CONSTRAINT tasks_jobs_fkey FOREIGN KEY (job_id) REFERENCES public.jobs(id) ON DELETE CASCADE;
 
 
 --
 -- Name: trial_issues trial_issues_trials_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY trial_issues
-    ADD CONSTRAINT trial_issues_trials_fkey FOREIGN KEY (trial_id) REFERENCES trials(id) ON DELETE CASCADE;
+ALTER TABLE ONLY public.trial_issues
+    ADD CONSTRAINT trial_issues_trials_fkey FOREIGN KEY (trial_id) REFERENCES public.trials(id) ON DELETE CASCADE;
 
 
 --
 -- Name: trials trials_tasks_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY trials
-    ADD CONSTRAINT trials_tasks_fkey FOREIGN KEY (task_id) REFERENCES tasks(id) ON DELETE CASCADE;
+ALTER TABLE ONLY public.trials
+    ADD CONSTRAINT trials_tasks_fkey FOREIGN KEY (task_id) REFERENCES public.tasks(id) ON DELETE CASCADE;
 
 
 --
@@ -2818,167 +2830,89 @@ ALTER TABLE ONLY trials
 
 SET search_path TO "$user", public;
 
-INSERT INTO schema_migrations (version) VALUES ('0');
+INSERT INTO "schema_migrations" (version) VALUES
+('0'),
+('1'),
+('10'),
+('11'),
+('12'),
+('13'),
+('15'),
+('16'),
+('17'),
+('2'),
+('20'),
+('22'),
+('25'),
+('26'),
+('27'),
+('28'),
+('29'),
+('3'),
+('30'),
+('32'),
+('33'),
+('34'),
+('35'),
+('36'),
+('37'),
+('38'),
+('39'),
+('40'),
+('400'),
+('401'),
+('402'),
+('403'),
+('404'),
+('405'),
+('406'),
+('407'),
+('408'),
+('409'),
+('41'),
+('410'),
+('411'),
+('412'),
+('414'),
+('415'),
+('417'),
+('418'),
+('419'),
+('42'),
+('420'),
+('421'),
+('422'),
+('423'),
+('424'),
+('425'),
+('426'),
+('427'),
+('428'),
+('429'),
+('43'),
+('430'),
+('431'),
+('432'),
+('433'),
+('434'),
+('45'),
+('46'),
+('5'),
+('51'),
+('52'),
+('53'),
+('54'),
+('55'),
+('56'),
+('57'),
+('58'),
+('59'),
+('6'),
+('60'),
+('61'),
+('62'),
+('63'),
+('64'),
+('7');
 
-INSERT INTO schema_migrations (version) VALUES ('1');
-
-INSERT INTO schema_migrations (version) VALUES ('10');
-
-INSERT INTO schema_migrations (version) VALUES ('11');
-
-INSERT INTO schema_migrations (version) VALUES ('12');
-
-INSERT INTO schema_migrations (version) VALUES ('13');
-
-INSERT INTO schema_migrations (version) VALUES ('15');
-
-INSERT INTO schema_migrations (version) VALUES ('16');
-
-INSERT INTO schema_migrations (version) VALUES ('17');
-
-INSERT INTO schema_migrations (version) VALUES ('2');
-
-INSERT INTO schema_migrations (version) VALUES ('20');
-
-INSERT INTO schema_migrations (version) VALUES ('22');
-
-INSERT INTO schema_migrations (version) VALUES ('25');
-
-INSERT INTO schema_migrations (version) VALUES ('26');
-
-INSERT INTO schema_migrations (version) VALUES ('27');
-
-INSERT INTO schema_migrations (version) VALUES ('28');
-
-INSERT INTO schema_migrations (version) VALUES ('29');
-
-INSERT INTO schema_migrations (version) VALUES ('3');
-
-INSERT INTO schema_migrations (version) VALUES ('30');
-
-INSERT INTO schema_migrations (version) VALUES ('32');
-
-INSERT INTO schema_migrations (version) VALUES ('33');
-
-INSERT INTO schema_migrations (version) VALUES ('34');
-
-INSERT INTO schema_migrations (version) VALUES ('35');
-
-INSERT INTO schema_migrations (version) VALUES ('36');
-
-INSERT INTO schema_migrations (version) VALUES ('37');
-
-INSERT INTO schema_migrations (version) VALUES ('38');
-
-INSERT INTO schema_migrations (version) VALUES ('39');
-
-INSERT INTO schema_migrations (version) VALUES ('40');
-
-INSERT INTO schema_migrations (version) VALUES ('400');
-
-INSERT INTO schema_migrations (version) VALUES ('401');
-
-INSERT INTO schema_migrations (version) VALUES ('402');
-
-INSERT INTO schema_migrations (version) VALUES ('403');
-
-INSERT INTO schema_migrations (version) VALUES ('404');
-
-INSERT INTO schema_migrations (version) VALUES ('405');
-
-INSERT INTO schema_migrations (version) VALUES ('406');
-
-INSERT INTO schema_migrations (version) VALUES ('407');
-
-INSERT INTO schema_migrations (version) VALUES ('408');
-
-INSERT INTO schema_migrations (version) VALUES ('409');
-
-INSERT INTO schema_migrations (version) VALUES ('41');
-
-INSERT INTO schema_migrations (version) VALUES ('410');
-
-INSERT INTO schema_migrations (version) VALUES ('411');
-
-INSERT INTO schema_migrations (version) VALUES ('412');
-
-INSERT INTO schema_migrations (version) VALUES ('414');
-
-INSERT INTO schema_migrations (version) VALUES ('415');
-
-INSERT INTO schema_migrations (version) VALUES ('417');
-
-INSERT INTO schema_migrations (version) VALUES ('418');
-
-INSERT INTO schema_migrations (version) VALUES ('419');
-
-INSERT INTO schema_migrations (version) VALUES ('42');
-
-INSERT INTO schema_migrations (version) VALUES ('420');
-
-INSERT INTO schema_migrations (version) VALUES ('421');
-
-INSERT INTO schema_migrations (version) VALUES ('422');
-
-INSERT INTO schema_migrations (version) VALUES ('423');
-
-INSERT INTO schema_migrations (version) VALUES ('424');
-
-INSERT INTO schema_migrations (version) VALUES ('425');
-
-INSERT INTO schema_migrations (version) VALUES ('426');
-
-INSERT INTO schema_migrations (version) VALUES ('427');
-
-INSERT INTO schema_migrations (version) VALUES ('428');
-
-INSERT INTO schema_migrations (version) VALUES ('429');
-
-INSERT INTO schema_migrations (version) VALUES ('43');
-
-INSERT INTO schema_migrations (version) VALUES ('430');
-
-INSERT INTO schema_migrations (version) VALUES ('431');
-
-INSERT INTO schema_migrations (version) VALUES ('432');
-
-INSERT INTO schema_migrations (version) VALUES ('433');
-
-INSERT INTO schema_migrations (version) VALUES ('45');
-
-INSERT INTO schema_migrations (version) VALUES ('46');
-
-INSERT INTO schema_migrations (version) VALUES ('5');
-
-INSERT INTO schema_migrations (version) VALUES ('51');
-
-INSERT INTO schema_migrations (version) VALUES ('52');
-
-INSERT INTO schema_migrations (version) VALUES ('53');
-
-INSERT INTO schema_migrations (version) VALUES ('54');
-
-INSERT INTO schema_migrations (version) VALUES ('55');
-
-INSERT INTO schema_migrations (version) VALUES ('56');
-
-INSERT INTO schema_migrations (version) VALUES ('57');
-
-INSERT INTO schema_migrations (version) VALUES ('58');
-
-INSERT INTO schema_migrations (version) VALUES ('59');
-
-INSERT INTO schema_migrations (version) VALUES ('6');
-
-INSERT INTO schema_migrations (version) VALUES ('60');
-
-INSERT INTO schema_migrations (version) VALUES ('61');
-
-INSERT INTO schema_migrations (version) VALUES ('62');
-
-INSERT INTO schema_migrations (version) VALUES ('63');
-
-INSERT INTO schema_migrations (version) VALUES ('64');
-
-INSERT INTO schema_migrations (version) VALUES ('7');
 

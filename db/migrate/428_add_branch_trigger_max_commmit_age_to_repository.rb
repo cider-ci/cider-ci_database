@@ -1,4 +1,4 @@
-class AddBranchTriggerMaxCommmitAgeToRepository < ActiveRecord::Migration
+class AddBranchTriggerMaxCommmitAgeToRepository < ActiveRecord::Migration[4.2]
   def change
     add_column :repositories, :branch_trigger_max_commit_age, :text, default: '12 hours'
 

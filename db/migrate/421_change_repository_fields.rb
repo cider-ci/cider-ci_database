@@ -1,4 +1,4 @@
-class ChangeRepositoryFields < ActiveRecord::Migration
+class ChangeRepositoryFields < ActiveRecord::Migration[4.2]
 
   class ChangeRepositoryFieldsRepository < ActiveRecord::Base
     self.table_name = :repositories
