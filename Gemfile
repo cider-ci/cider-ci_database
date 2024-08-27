@@ -1,11 +1,11 @@
 source 'https://rubygems.org'
 
 # RAILS
-gem 'rails', '~> 4.2'
+gem 'rails', '~> 6.1.0'
 
-gem 'activerecord-jdbcpostgresql-adapter',  platform: :jruby
-gem 'jdbc-postgres', platform: :jruby
-gem 'pg', platform: 'mri'
-gem 'pg_tasks', '>= 1.3.0', '< 2.0.0'
+# gem 'activerecord-jdbcpostgresql-adapter'
+# gem 'jdbc-postgres'
+gem 'pg', '~> 1.5'
+gem 'pg_tasks', git: 'https://github.com/DrTom/rails_pg-tasks', branch: 'mk/rails-upgrade'
 
 gem 'pry', group: [:development, :test]
