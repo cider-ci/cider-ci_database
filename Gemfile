@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 # RAILS
-gem 'rails', '~> 6.0.0'
+gem 'rails', '~> 6.1.0'
 
 # gem 'activerecord-jdbcpostgresql-adapter'
 # gem 'jdbc-postgres'
