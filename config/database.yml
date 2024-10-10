@@ -3,9 +3,9 @@ default: &default
   encoding: unicode
   host: localhost
   pool: 3
-  username: cider-ci
-  password: secret
-  database: cider-ci_v4
+  username: tom
+  password: tom
+  database: cider-ci
   variables:
     statement_timeout: 1000
 

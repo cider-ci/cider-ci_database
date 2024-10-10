@@ -1,10 +1,10 @@
-class ChangeRepositoryFields < ActiveRecord::Migration
+class ChangeRepositoryFields < ActiveRecord::Migration[4.2]
 
   class ChangeRepositoryFieldsRepository < ActiveRecord::Base
     self.table_name = :repositories
   end
 
-  def change
+  def up
 
     add_column :repositories, :foreign_api_token_bearer, :string
 

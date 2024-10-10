@@ -1,6 +1,6 @@
 require File.expand_path('../migration_helper.rb', __FILE__)
 
-class CreatePendingJobEvaluations < ActiveRecord::Migration
+class CreatePendingJobEvaluations < ActiveRecord::Migration[4.2]
   include MigrationHelper
 
   def change
@@ -39,6 +39,7 @@ class CreatePendingJobEvaluations < ActiveRecord::Migration
             create_pending_job_evaluation_on_task_state_update_event_insert();
         SQL
       end
+
       dir.down do
         execute <<-SQL.strip_heredoc
           DROP TRIGGER

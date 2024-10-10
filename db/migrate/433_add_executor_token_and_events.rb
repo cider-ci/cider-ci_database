@@ -1,6 +1,6 @@
 require File.expand_path('../migration_helper.rb', __FILE__)
 
-class AddExecutorTokenAndEvents < ActiveRecord::Migration
+class AddExecutorTokenAndEvents < ActiveRecord::Migration[4.2]
   include MigrationHelper
 
 

@@ -1,4 +1,4 @@
-class AdjustRemoteApiType < ActiveRecord::Migration
+class AdjustRemoteApiType < ActiveRecord::Migration[4.2]
   def change
 
     execute <<-SQL

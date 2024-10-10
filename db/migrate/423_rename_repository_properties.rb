@@ -1,4 +1,4 @@
-class RenameRepositoryProperties < ActiveRecord::Migration
+class RenameRepositoryProperties < ActiveRecord::Migration[4.2]
   def change
 
     execute <<-SQL.strip_heredoc

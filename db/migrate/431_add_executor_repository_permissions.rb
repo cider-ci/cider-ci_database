@@ -1,4 +1,4 @@
-class AddExecutorRepositoryPermissions < ActiveRecord::Migration
+class AddExecutorRepositoryPermissions < ActiveRecord::Migration[4.2]
   def change
 
     add_column :repositories, :all_executors_permitted, :boolean, default: true, null: false

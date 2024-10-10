@@ -1,6 +1,6 @@
 require File.expand_path('../migration_helper.rb', __FILE__)
 
-class CreateTreeIdNotifications < ActiveRecord::Migration
+class CreateTreeIdNotifications < ActiveRecord::Migration[4.2]
   include MigrationHelper
 
   def change
