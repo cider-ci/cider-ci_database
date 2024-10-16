@@ -1,4 +1,4 @@
-require File.expand_path('../migration_helper.rb', __FILE__)
+require File.expand_path("../migration_helper.rb", __FILE__)
 
 class CreatePendingTaskEvaluations < ActiveRecord::Migration[4.2]
   include MigrationHelper
@@ -49,6 +49,5 @@ class CreatePendingTaskEvaluations < ActiveRecord::Migration[4.2]
         SQL
       end
     end
-
   end
 end

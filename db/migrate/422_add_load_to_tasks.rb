@@ -1,7 +1,6 @@
 class AddLoadToTasks < ActiveRecord::Migration[4.2]
   def up
-
-    execute 'DROP VIEW executors_with_load;'
+    execute "DROP VIEW executors_with_load;"
 
     add_column :tasks, :load, :float, null: false, default: 1.0
     execute <<-SQL.strip_heredoc
@@ -14,7 +13,7 @@ class AddLoadToTasks < ActiveRecord::Migration[4.2]
     execute <<-SQL.strip_heredoc
       ALTER TABLE executors
         ADD CONSTRAINT max_load_is_positive CHECK (max_load >= 0)
-     SQL
+    SQL
 
     add_column :executors, :temporary_overload_factor, :float,
       null: false, default: 1.5
@@ -22,7 +21,7 @@ class AddLoadToTasks < ActiveRecord::Migration[4.2]
       ALTER TABLE executors
         ADD CONSTRAINT sensible_temoporary_overload_factor
           CHECK (temporary_overload_factor >= 1.0)
-     SQL
+    SQL
 
     execute <<-SQL.strip_heredoc
       CREATE OR REPLACE VIEW executors_load AS
@@ -43,6 +42,5 @@ class AddLoadToTasks < ActiveRecord::Migration[4.2]
         FROM executors
           JOIN executors_load ON executors_load.executor_id = executors.id
     SQL
-
   end
 end

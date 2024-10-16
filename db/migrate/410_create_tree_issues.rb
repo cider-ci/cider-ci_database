@@ -1,4 +1,4 @@
-require File.expand_path('../migration_helper.rb', __FILE__)
+require File.expand_path("../migration_helper.rb", __FILE__)
 
 class CreateTreeIssues < ActiveRecord::Migration[4.2]
   include MigrationHelper
@@ -7,12 +7,12 @@ class CreateTreeIssues < ActiveRecord::Migration[4.2]
     create_table :tree_issues, id: :uuid do |t|
       t.text :title
       t.text :description
-      t.string :type, null: false, default: 'error'
+      t.string :type, null: false, default: "error"
       t.text "tree_id", null: false
       t.index "tree_id"
     end
 
-    add_auto_timestamps 'tree_issues'
+    add_auto_timestamps "tree_issues"
 
     execute <<-SQL.strip_heredoc
       DROP VIEW IF EXISTS commit_cache_signatures;
@@ -33,6 +33,5 @@ class CreateTreeIssues < ActiveRecord::Migration[4.2]
         LEFT OUTER JOIN tree_issues ON tree_issues.tree_id = commits.tree_id
         GROUP BY commits.id;
     SQL
-
   end
 end

@@ -1,4 +1,4 @@
-require File.expand_path('../migration_helper.rb', __FILE__)
+require File.expand_path("../migration_helper.rb", __FILE__)
 
 class UdateJobStatsView < ActiveRecord::Migration[4.2]
   include MigrationHelper
@@ -12,13 +12,12 @@ class UdateJobStatsView < ActiveRecord::Migration[4.2]
           CREATE OR REPLACE VIEW job_stats AS
             SELECT jobs.id as job_id,
              (select count(*) from tasks where tasks.job_id = jobs.id) as total,
-        #{ config_default[:constants][:STATES][:JOB].map{|state|
-        "(select count(*) from tasks where tasks.job_id = jobs.id and state = '" + state +"') AS " + state
+        #{ config_default[:constants][:STATES][:JOB].map { |state|
+          "(select count(*) from tasks where tasks.job_id = jobs.id and state = '" + state + "') AS " + state
         }.join(", ")}
             FROM jobs
 
         SQL
-
       end
     end
   end

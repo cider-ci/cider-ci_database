@@ -1,10 +1,9 @@
-require File.expand_path('../migration_helper.rb', __FILE__)
+require File.expand_path("../migration_helper.rb", __FILE__)
 
 class AddApiTokens < ActiveRecord::Migration[4.2]
   include MigrationHelper
 
   def change
-
     create_table :api_tokens, id: :uuid do |t|
       t.uuid :user_id, null: false
       t.string :token_hash, null: false, limit: 45
@@ -21,14 +20,12 @@ class AddApiTokens < ActiveRecord::Migration[4.2]
 
     add_auto_timestamps :api_tokens
 
-    add_foreign_key :api_tokens, :users , on_delete: :cascade, on_update: :cascade
+    add_foreign_key :api_tokens, :users, on_delete: :cascade, on_update: :cascade
 
-
-    add_column :api_tokens, :expires_at, 'timestamp with time zone', null: false
+    add_column :api_tokens, :expires_at, "timestamp with time zone", null: false
 
     reversible do |dir|
       dir.up do
-
         execute <<-SQL
 
           ALTER TABLE api_tokens ADD CONSTRAINT sensible_scrope_write CHECK
@@ -45,6 +42,5 @@ class AddApiTokens < ActiveRecord::Migration[4.2]
         execute "ALTER TABLE api_tokens ALTER COLUMN expires_at SET DEFAULT now() + interval '1 year'"
       end
     end
-
   end
 end

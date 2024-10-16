@@ -1,8 +1,8 @@
-module MigrationHelper extend ActiveSupport::Concern
-
+module MigrationHelper
+  extend ActiveSupport::Concern
   def config_default
     @config_default ||= YAML.load_file(
-      File.expand_path('../../../config_default.yml', __FILE__)
+      File.expand_path("../../../config_default.yml", __FILE__)
     ).with_indifferent_access
   end
 
@@ -21,15 +21,14 @@ module MigrationHelper extend ActiveSupport::Concern
   def add_auto_timestamps(table_name, created_at: true, updated_at: true)
     reversible do |dir|
       dir.up do
-
         if created_at
-          add_column(table_name, :created_at, 'timestamp with time zone')
+          add_column(table_name, :created_at, "timestamp with time zone")
           execute "ALTER TABLE #{table_name} ALTER COLUMN created_at SET DEFAULT now()"
           execute "ALTER TABLE #{table_name} ALTER COLUMN created_at SET NOT NULL"
         end
 
         if updated_at
-          add_column(table_name, :updated_at, 'timestamp with time zone')
+          add_column(table_name, :updated_at, "timestamp with time zone")
           execute "ALTER TABLE #{table_name} ALTER COLUMN updated_at SET DEFAULT now()"
           execute "ALTER TABLE #{table_name} ALTER COLUMN updated_at SET NOT NULL"
 
@@ -65,14 +64,11 @@ module MigrationHelper extend ActiveSupport::Concern
     end
   end
 
-
   def add_or_replace_events_table table_name
-
     entity_name = table_name.to_s.singularize
 
     event_table_name = "#{entity_name}_events"
     trigger_name = event_table_name.singularize
-
 
     reversible do |dir|
       dir.up do
@@ -84,13 +80,12 @@ module MigrationHelper extend ActiveSupport::Concern
       end
     end
 
-    create_table event_table_name, id: :uuid  do |t|
+    create_table event_table_name, id: :uuid do |t|
       t.uuid "#{entity_name}_id", index: true
       t.text :event
     end
 
     reversible do |dir|
-
       dir.up do
         add_auto_timestamps event_table_name, updated_at: false
 
@@ -125,11 +120,10 @@ module MigrationHelper extend ActiveSupport::Concern
             ON #{table_name}
             EXECUTE PROCEDURE #{trigger_name}();
 
-         SQL
+        SQL
       end
 
       dir.down do
-
         execute <<-SQL.strip_heredoc
 
           DROP TRIGGER #{trigger_name} ON #{table_name};
@@ -137,10 +131,7 @@ module MigrationHelper extend ActiveSupport::Concern
           DROP FUNCTION #{trigger_name}();
 
         SQL
-
       end
-
-
     end
 
     ### clean old events ######################################################
@@ -173,5 +164,4 @@ module MigrationHelper extend ActiveSupport::Concern
       end
     end
   end
-
 end

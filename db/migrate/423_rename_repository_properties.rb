@@ -1,10 +1,8 @@
 class RenameRepositoryProperties < ActiveRecord::Migration[4.2]
   def change
-
     execute <<-SQL.strip_heredoc
       ALTER TABLE repositories DROP CONSTRAINT check_valid_foreign_api_type;
     SQL
-
 
     rename_column :repositories, :foreign_api_repo, :remote_api_name
     rename_column :repositories, :foreign_api_owner, :remote_api_namespace
@@ -23,6 +21,5 @@ class RenameRepositoryProperties < ActiveRecord::Migration[4.2]
         SQL
       end
     end
-
   end
 end

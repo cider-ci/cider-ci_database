@@ -1,4 +1,4 @@
-require File.expand_path('../migration_helper.rb', __FILE__)
+require File.expand_path("../migration_helper.rb", __FILE__)
 
 class CreateRepositoryEvents < ActiveRecord::Migration[4.2]
   include MigrationHelper

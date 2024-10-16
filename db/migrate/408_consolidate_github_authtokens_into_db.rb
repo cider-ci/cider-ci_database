@@ -1,10 +1,10 @@
 class ConsolidateGithubAuthtokensIntoDb < ActiveRecord::Migration[4.2]
   def change
-    add_column :repositories, :foreign_api_endpoint, :text, null: false, default: ''
-    add_column :repositories, :foreign_api_authtoken, :text, null: false, default: ''
-    add_column :repositories, :foreign_api_owner, :text, null: false, default: ''
-    add_column :repositories, :foreign_api_repo, :text, null: false, default: ''
-    add_column :repositories, :foreign_api_type, :text, null: false, default: 'github'
+    add_column :repositories, :foreign_api_endpoint, :text, null: false, default: ""
+    add_column :repositories, :foreign_api_authtoken, :text, null: false, default: ""
+    add_column :repositories, :foreign_api_owner, :text, null: false, default: ""
+    add_column :repositories, :foreign_api_repo, :text, null: false, default: ""
+    add_column :repositories, :foreign_api_type, :text, null: false, default: "github"
 
     reversible do |dir|
       dir.up do

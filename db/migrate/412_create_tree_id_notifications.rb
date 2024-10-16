@@ -1,4 +1,4 @@
-require File.expand_path('../migration_helper.rb', __FILE__)
+require File.expand_path("../migration_helper.rb", __FILE__)
 
 class CreateTreeIdNotifications < ActiveRecord::Migration[4.2]
   include MigrationHelper
@@ -11,14 +11,12 @@ class CreateTreeIdNotifications < ActiveRecord::Migration[4.2]
       t.text :description
     end
 
-    add_auto_timestamps 'tree_id_notifications'
-
+    add_auto_timestamps "tree_id_notifications"
 
     ### create tree_id_notification on branch update ###########################
 
     reversible do |dir|
       dir.up do
-
         execute <<-SQL.strip_heredoc
           CREATE OR REPLACE FUNCTION
             create_tree_id_notification_on_branch_change()
@@ -44,7 +42,6 @@ class CreateTreeIdNotifications < ActiveRecord::Migration[4.2]
           EXECUTE PROCEDURE
             create_tree_id_notification_on_branch_change();
         SQL
-
       end
 
       dir.down do
@@ -53,15 +50,12 @@ class CreateTreeIdNotifications < ActiveRecord::Migration[4.2]
             create_tree_id_notification_on_branch_change ON branches;
         SQL
       end
-
     end
-
 
     ### create tree_id_notification on job update ##############################
 
     reversible do |dir|
       dir.up do
-
         execute <<-SQL.strip_heredoc
           CREATE OR REPLACE FUNCTION
             create_tree_id_notification_on_job_state_change()
@@ -95,7 +89,6 @@ class CreateTreeIdNotifications < ActiveRecord::Migration[4.2]
           EXECUTE PROCEDURE
             create_tree_id_notification_on_job_state_change();
         SQL
-
       end
 
       dir.down do
@@ -106,7 +99,5 @@ class CreateTreeIdNotifications < ActiveRecord::Migration[4.2]
         SQL
       end
     end
-
   end
-
 end

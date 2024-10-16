@@ -1,11 +1,9 @@
 class ChangeRepositoryFields < ActiveRecord::Migration[4.2]
-
   class ChangeRepositoryFieldsRepository < ActiveRecord::Base
     self.table_name = :repositories
   end
 
   def up
-
     add_column :repositories, :foreign_api_token_bearer, :string
 
     change_column :repositories, :foreign_api_endpoint, :string, null: true, default: nil
@@ -37,6 +35,5 @@ class ChangeRepositoryFields < ActiveRecord::Migration[4.2]
         ADD CONSTRAINT foreign_api_repo_not_empty
         CHECK (foreign_api_repo <> '');
     SQL
-
   end
 end

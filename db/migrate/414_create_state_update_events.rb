@@ -1,23 +1,21 @@
-require File.expand_path('../migration_helper.rb', __FILE__)
+require File.expand_path("../migration_helper.rb", __FILE__)
 
 class CreateStateUpdateEvents < ActiveRecord::Migration[4.2]
   include MigrationHelper
 
   def change
-
     entities = [
-      { table_name: "job_state_update_events",
-        entity_name: "job" },
-      { table_name: "task_state_update_events",
-        entity_name: "task" },
-      { table_name: "trial_state_update_events",
-        entity_name: "trial" },
-      { table_name: "script_state_update_events",
-        entity_name: "script" },
+      {table_name: "job_state_update_events",
+       entity_name: "job"},
+      {table_name: "task_state_update_events",
+       entity_name: "task"},
+      {table_name: "trial_state_update_events",
+       entity_name: "trial"},
+      {table_name: "script_state_update_events",
+       entity_name: "script"}
     ]
 
     entities.each do |params|
-
       table_name = params[:table_name]
       entity_name = params[:entity_name]
       trigger_name = "create_#{table_name}"
@@ -39,16 +37,14 @@ class CreateStateUpdateEvents < ActiveRecord::Migration[4.2]
             ALTER TABLE #{table_name}
                 DROP CONSTRAINT IF EXISTS check_valid_state;
             ALTER TABLE #{table_name} ADD CONSTRAINT check_valid_state CHECK
-            (state IN (#{ config_default[:constants][:STATES][entity_name.upcase.to_sym].map{|s|"'#{s}'"}.join(', ')}));
+            (state IN (#{config_default[:constants][:STATES][entity_name.upcase.to_sym].map { |s| "'#{s}'" }.join(", ")}));
           SQL
         end
       end
 
-
       ### insert trigger ########################################################
       reversible do |dir|
         dir.up do
-
           execute <<-SQL.strip_heredoc
             CREATE OR REPLACE FUNCTION #{trigger_name}()
             RETURNS TRIGGER AS $$
@@ -72,8 +68,6 @@ class CreateStateUpdateEvents < ActiveRecord::Migration[4.2]
             WHEN (OLD.state IS DISTINCT FROM NEW.state)
             EXECUTE PROCEDURE #{trigger_name}();
           SQL
-
-
         end
 
         dir.down do
@@ -83,7 +77,6 @@ class CreateStateUpdateEvents < ActiveRecord::Migration[4.2]
           SQL
         end
       end
-
 
       ### clean old events ######################################################
 
@@ -114,9 +107,6 @@ class CreateStateUpdateEvents < ActiveRecord::Migration[4.2]
           SQL
         end
       end
-
     end
   end
 end
-
-

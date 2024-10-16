@@ -1,7 +1,7 @@
 require_relative "boot"
 
 require "rails/all"
-require 'pry'
+require "pry"
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -14,8 +14,8 @@ module CiderCiDatabase
     config.active_record.schema_format = :sql
     config.active_record.timestamped_migrations = false
 
-    config.paths['config/initializers'] \
-      << Rails.root.join('initializers')
+    config.paths["config/initializers"] \
+      << Rails.root.join("initializers")
 
     # Please, add to the `ignore` list any other `lib` subdirectories that do
     # not contain `.rb` files, or that should not be reloaded or eager loaded.
@@ -24,10 +24,10 @@ module CiderCiDatabase
 
     config.active_record.belongs_to_required_by_default = false
 
-    if ENV['RAILS_LOG_LEVEL'].present?
-      config.log_level = ENV['RAILS_LOG_LEVEL']
+    config.log_level = if ENV["RAILS_LOG_LEVEL"].present?
+      ENV["RAILS_LOG_LEVEL"]
     else
-      config.log_level = :info
+      :info
     end
   end
 end

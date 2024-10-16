@@ -1,4 +1,4 @@
-require File.expand_path('../migration_helper.rb', __FILE__)
+require File.expand_path("../migration_helper.rb", __FILE__)
 
 class CreatePendingCreateTrialsEvaluations < ActiveRecord::Migration[4.2]
   include MigrationHelper
@@ -58,7 +58,7 @@ class CreatePendingCreateTrialsEvaluations < ActiveRecord::Migration[4.2]
         execute <<-SQL.strip_heredoc
           CREATE TRIGGER create_pending_create_trials_evaluations_on_trial_state_change
           AFTER INSERT ON trial_state_update_events FOR EACH ROW
-          WHEN (NEW.state IN (#{config_default[:constants][:STATES][:FINISHED].map{|s|"'#{s}'"}.join(', ')}))
+          WHEN (NEW.state IN (#{config_default[:constants][:STATES][:FINISHED].map { |s| "'#{s}'" }.join(", ")}))
           EXECUTE PROCEDURE create_pending_create_trials_evaluations_on_trial_state_change();
         SQL
       end
@@ -69,6 +69,5 @@ class CreatePendingCreateTrialsEvaluations < ActiveRecord::Migration[4.2]
         SQL
       end
     end
-
   end
 end

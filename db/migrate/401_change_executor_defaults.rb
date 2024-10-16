@@ -1,9 +1,8 @@
 class ChangeExecutorDefaults < ActiveRecord::Migration[4.2]
-
   def change
     reversible do |dir|
       dir.up do
-        execute 'DROP VIEW executors_with_load;'
+        execute "DROP VIEW executors_with_load;"
         change_column :executors, :upload_tree_attachments, :boolean, default: true, null: false
         remove_column :executors, :base_url, :text
         execute <<-SQL
@@ -20,4 +19,3 @@ class ChangeExecutorDefaults < ActiveRecord::Migration[4.2]
     end
   end
 end
-

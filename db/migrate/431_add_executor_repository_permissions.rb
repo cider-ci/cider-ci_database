@@ -1,6 +1,5 @@
 class AddExecutorRepositoryPermissions < ActiveRecord::Migration[4.2]
   def change
-
     add_column :repositories, :all_executors_permitted, :boolean, default: true, null: false
 
     create_table :repository_executor_permissions, id: :uuid do |t|
@@ -11,7 +10,6 @@ class AddExecutorRepositoryPermissions < ActiveRecord::Migration[4.2]
 
     add_foreign_key :repository_executor_permissions, :repositories, on_delete: :cascade, on_update: :cascade
     add_foreign_key :repository_executor_permissions, :executors, on_delete: :cascade, on_update: :cascade
-
 
     add_column :repositories, :all_users_permitted, :boolean, default: true, null: false
 
@@ -24,6 +22,5 @@ class AddExecutorRepositoryPermissions < ActiveRecord::Migration[4.2]
 
     add_foreign_key :repository_user_permissions, :repositories, on_delete: :cascade, on_update: :cascade
     add_foreign_key :repository_user_permissions, :users, on_delete: :cascade, on_update: :cascade
-
   end
 end

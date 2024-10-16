@@ -1,12 +1,9 @@
-require File.expand_path('../migration_helper.rb', __FILE__)
+require File.expand_path("../migration_helper.rb", __FILE__)
 
 class AddExecutorTokenAndEvents < ActiveRecord::Migration[4.2]
   include MigrationHelper
 
-
   def change
-
-
     reversible do |dir|
       dir.up do
         execute <<-SQL.strip_heredoc
@@ -24,11 +21,8 @@ class AddExecutorTokenAndEvents < ActiveRecord::Migration[4.2]
     add_index :executors, :token_hash, unique: true
     add_or_replace_events_table :executors
 
-
     reversible do |dir|
-
       dir.up do
-
         execute <<-SQL.strip_heredoc
           CREATE OR REPLACE VIEW executors_load AS
             SELECT count(trials.id) AS trials_count,
@@ -56,9 +50,6 @@ class AddExecutorTokenAndEvents < ActiveRecord::Migration[4.2]
           DROP VIEW executors_load;
         SQL
       end
-
     end
-
   end
-
 end

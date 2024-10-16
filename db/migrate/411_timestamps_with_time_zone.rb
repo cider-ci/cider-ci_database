@@ -1,12 +1,10 @@
 class TimestampsWithTimeZone < ActiveRecord::Migration[4.2]
   def change
-
     res = execute <<-SQL.strip_heredoc
       SELECT table_name from INFORMATION_SCHEMA.views WHERE table_schema = ANY (current_schemas(false));
     SQL
 
     view_names = res.to_a.map(&:first).map(&:to_a).map(&:second)
-
 
     views = view_names.map do |view_name|
       res = execute <<-SQL.strip_heredoc
@@ -16,7 +14,7 @@ class TimestampsWithTimeZone < ActiveRecord::Migration[4.2]
       [view_name, view]
     end.to_h
 
-    views.each do |name,view|
+    views.each do |name, view|
       execute "DROP VIEW #{name}"
     end
 
@@ -39,12 +37,11 @@ class TimestampsWithTimeZone < ActiveRecord::Migration[4.2]
     tables = tables.to_a.map(&:first).map(&:second)
 
     tables.each do |table|
-
       columns = execute <<-SQL.strip_heredoc
         select column_name, data_type FROM INFORMATION_SCHEMA.COLUMNS
           WHERE table_name = '#{table}'
           AND data_type ilike 'timestamp%'
-       SQL
+      SQL
 
       columns.to_a.map(&:first).map(&:second).each do |column|
         puts "converting #{column} of #{table}"
@@ -54,12 +51,11 @@ class TimestampsWithTimeZone < ActiveRecord::Migration[4.2]
       end
     end
 
-    views.each do |name,view|
+    views.each do |name, view|
       execute <<-SQL.strip_heredoc
         CREATE VIEW #{name}
         AS #{view}
       SQL
     end
-
   end
 end

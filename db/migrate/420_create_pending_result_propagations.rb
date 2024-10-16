@@ -1,4 +1,4 @@
-require File.expand_path('../migration_helper.rb', __FILE__)
+require File.expand_path("../migration_helper.rb", __FILE__)
 
 class CreatePendingResultPropagations < ActiveRecord::Migration[4.2]
   include MigrationHelper
@@ -13,7 +13,6 @@ class CreatePendingResultPropagations < ActiveRecord::Migration[4.2]
 
     reversible do |dir|
       dir.up do
-
         execute <<-SQL.strip_heredoc
           CREATE OR REPLACE FUNCTION
             create_pending_result_propagation()
@@ -34,7 +33,6 @@ class CreatePendingResultPropagations < ActiveRecord::Migration[4.2]
           EXECUTE PROCEDURE
             create_pending_result_propagation();
         SQL
-
       end
 
       dir.down do
@@ -43,9 +41,6 @@ class CreatePendingResultPropagations < ActiveRecord::Migration[4.2]
           DROP FUNCTION create_pending_result_propagation();
         SQL
       end
-
     end
-
-
   end
 end

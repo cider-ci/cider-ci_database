@@ -1,4 +1,4 @@
-require File.expand_path('../migration_helper.rb', __FILE__)
+require File.expand_path("../migration_helper.rb", __FILE__)
 
 class CreateBranchUpdateEvents < ActiveRecord::Migration[4.2]
   include MigrationHelper
@@ -14,7 +14,6 @@ class CreateBranchUpdateEvents < ActiveRecord::Migration[4.2]
 
     reversible do |dir|
       dir.up do
-
         execute <<-SQL.strip_heredoc
           CREATE OR REPLACE FUNCTION
             create_branch_update_event()
@@ -40,7 +39,6 @@ class CreateBranchUpdateEvents < ActiveRecord::Migration[4.2]
           EXECUTE PROCEDURE
             create_branch_update_event();
         SQL
-
       end
 
       dir.down do
@@ -49,7 +47,6 @@ class CreateBranchUpdateEvents < ActiveRecord::Migration[4.2]
           DROP FUNCTION create_branch_update_event();
         SQL
       end
-
     end
 
     ### clean old events ######################################################
@@ -81,9 +78,5 @@ class CreateBranchUpdateEvents < ActiveRecord::Migration[4.2]
         SQL
       end
     end
-
-
-
-
   end
 end
